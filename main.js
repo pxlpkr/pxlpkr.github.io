@@ -140,6 +140,11 @@ let words = {
     "h0,0": new Word(getWord())
 };
 
+function getTouches(evt) {
+    return evt.touches ||             // browser API
+        evt.originalEvent.touches; // jQuery
+}
+
 document.addEventListener("mousedown", mouseDown);
 document.addEventListener("touchstart", mouseDown);
 
@@ -154,45 +159,49 @@ function mouseDown(event) {
     }
 }
 
-document.addEventListener("mouseup", mouseUp);
-document.addEventListener("touchend", mouseUp);
+function touchDown(event) {
+    const touch = getTouches(evt)[0];
+    if (touch.clientY < res[1]*0.7) {
+        clientX = touch.clientX
+        clientY = touch.clientY
+        oldCanvasPosition = [...canvasPosition];
+        drawToCanvas();
+        dragging = false;
+        musDown = true;
+    }
+}
 
-function mouseUp(event) {
-    if (event.button == 0) {
-        musDown = false;
-        if (clientX != undefined){
-            clientX = undefined
-            clientY = undefined
-            drawToCanvas();
-        }
-        if (!dragging && event.clientY < res[1]*0.7) {
-            let mousePosition = [event.clientX, event.clientY];
-            for (const [id, word] of Object.entries(words)) {
-                let pos = id.slice(1).split(',');
-                pos = aFunc(pos, parseInt);
-                let npos = pose(pos);
-                if (word.orientation == "H") {
-                    if (pointInRect(mousePosition,[npos[0],npos[1],400*canvasScale,80*canvasScale])) {
-                        for (const [c,letter] of Object.entries(word.letters)) {
-                            if (letter.status == "WHITE") {
-                                if (pointInRect(mousePosition,[npos[0]+80*canvasScale*c,npos[1],80*canvasScale,80*canvasScale])) {
-                                    selectedWord = `h${pos[0]},${pos[1]}`;
-                                    drawToCanvas();
-                                    return;
-                                }
+document.addEventListener("mouseup", mouseUp);
+document.addEventListener("touchend", touchUp);
+
+function nUp(event) {
+    if (!dragging && event.clientY < res[1]*0.7) {
+        let mousePosition = [event.clientX, event.clientY];
+        for (const [id, word] of Object.entries(words)) {
+            let pos = id.slice(1).split(',');
+            pos = aFunc(pos, parseInt);
+            let npos = pose(pos);
+            if (word.orientation == "H") {
+                if (pointInRect(mousePosition,[npos[0],npos[1],400*canvasScale,80*canvasScale])) {
+                    for (const [c,letter] of Object.entries(word.letters)) {
+                        if (letter.status == "WHITE") {
+                            if (pointInRect(mousePosition,[npos[0]+80*canvasScale*c,npos[1],80*canvasScale,80*canvasScale])) {
+                                selectedWord = `h${pos[0]},${pos[1]}`;
+                                drawToCanvas();
+                                return;
                             }
                         }
                     }
                 }
-                else if (word.orientation == "V") {
-                    if (pointInRect(mousePosition,[npos[0],npos[1],80*canvasScale,400*canvasScale])) {
-                        for (const [c,letter] of Object.entries(word.letters)) {
-                            if (letter.status == "WHITE") {
-                                if (pointInRect(mousePosition,[npos[0],npos[1]+80*canvasScale*c,80*canvasScale,80*canvasScale])) {
-                                    selectedWord = `v${pos[0]},${pos[1]}`;
-                                    drawToCanvas();
-                                    return;
-                                }
+            }
+            else if (word.orientation == "V") {
+                if (pointInRect(mousePosition,[npos[0],npos[1],80*canvasScale,400*canvasScale])) {
+                    for (const [c,letter] of Object.entries(word.letters)) {
+                        if (letter.status == "WHITE") {
+                            if (pointInRect(mousePosition,[npos[0],npos[1]+80*canvasScale*c,80*canvasScale,80*canvasScale])) {
+                                selectedWord = `v${pos[0]},${pos[1]}`;
+                                drawToCanvas();
+                                return;
                             }
                         }
                     }
@@ -202,17 +211,45 @@ function mouseUp(event) {
     }
 }
 
+function mouseUp(event) {
+    if (event.button == 0) {
+        musDown = false;
+        if (clientX != undefined){
+            clientX = undefined
+            clientY = undefined
+            drawToCanvas();
+        }
+        nUp(event);
+    }
+}
+
+function touchUp(event) {
+    const touch = getTouches(evt)[0];
+    nUp(touch);
+}
+
 document.addEventListener("mousemove", mouseMove);
 document.addEventListener("touchmove", mouseMove);
 
+function touchMove(event) {
+    if (musDown) {
+        const touch = event.touches[0];
+        nMove(touch);
+    }
+}
+
 function mouseMove(event) {
     if (event.button == 0 && musDown) {
-        if (Math.sqrt(Math.pow(event.clientX-clientX,2)+Math.pow(event.clientY-clientY,2)) > 5) {
-            canvasPosition[0] = oldCanvasPosition[0]+(event.clientX-clientX);
-            canvasPosition[1] = oldCanvasPosition[1]+(event.clientY-clientY);
-            drawToCanvas();
-            dragging = true;
-        }
+        nMove(event);
+    }
+}
+
+function nMove(event) {
+    if (Math.sqrt(Math.pow(event.clientX-clientX,2)+Math.pow(event.clientY-clientY,2)) > 5) {
+        canvasPosition[0] = oldCanvasPosition[0]+(event.clientX-clientX);
+        canvasPosition[1] = oldCanvasPosition[1]+(event.clientY-clientY);
+        drawToCanvas();
+        dragging = true;
     }
 }
 
