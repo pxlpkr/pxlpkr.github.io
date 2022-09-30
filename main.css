@@ -59,7 +59,7 @@ body {
     border-width: 2px;
     margin-left: 5px;
     margin-right: 5px;
-    min-width: 8vh;
+    /* min-width: 8vh; */
     height: 8vh;
     background: #ffffff;
     /* border-radius: 3px; */
@@ -68,6 +68,7 @@ body {
 
 .keywarn {
     background: #ffdddd;
+    /* min-width: 8vh; */
 }
 
 .keyinv {

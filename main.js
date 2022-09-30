@@ -559,11 +559,17 @@ function fixCanvasSize() {
 }
 
 function fixKeyboardScaling() {
-    let minHeight = res[1]*0.3/3.5;
-    let minWidth = res[0]/16;
-    let desired = Math.min(minHeight,minWidth);
+    let maxHeight = res[1]*0.3/3.5;
+    let maxWidth = res[0]/22;
+    let desired = Math.min(maxHeight,maxWidth);
     for (const char of alphabet) {
         document.getElementById(char).style.width = `${desired}px`;
+        document.getElementById(char).style.height = `${desired}px`;
+        document.getElementById(char).style.fontSize = `${desired*25/40}px`;
+    }
+    for (const k of ["enter","resign","enteri"]) {
+        document.getElementById(k).style.height = `${desired}px`;
+        document.getElementById(k).style.fontSize = `${desired*25/40}px`;
     }
 }
   
