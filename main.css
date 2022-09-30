@@ -95,6 +95,10 @@ body {
     bottom: 28px;
 }
 
+.nudget2 {
+    bottom: 56px;
+}
+
 .locktm {
     position: absolute;
     left: 50%;

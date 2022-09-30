@@ -74,6 +74,9 @@ let clientX;
 let clientY;
 let selectedWord = "h0,0";
 let letterMap = ["0:0","1:0","2:0","3:0","4:0"];
+let complete = false;
+
+let guesses = 0;
 
 let timer = 0;
 
@@ -278,9 +281,10 @@ document.addEventListener ("keydown", function(event) {
         backKeyPressEvent();
     } else if (event.key == "Enter") {
         enterKeyPressEvent();
-    } else if (event.key == "\\") {
+    } else if (event.key == "\\" && timer == 0) {
         hud("Activated absurd mode.")
         validAnswers = validWords;
+        words["h0,0"] = new Word(getWord());
     } else if (["ArrowDown","ArrowUp","ArrowLeft","ArrowRight"].includes(event.key)) {
         if (!heldKeys.includes(event.key)) {
             heldKeys.push(event.key);
@@ -317,15 +321,18 @@ function backKeyPressEvent() {
 }
 
 function enterKeyPressEvent() {
-    if (timer == 0) {
+    if (timer == 0 && !complete) {
         timer = 1;
     }
     let inputWord = "";
     for (const letter of words[selectedWord].letters) {
-        if (letter.displaychar == "" || (noBannedLetters && letter.status == "WHITE" && (
+        if (letter.displaychar == "") {
+            return;
+        }
+        if (noBannedLetters && letter.status == "WHITE" && (
             bannedChars.includes(letter.displaychar.toLowerCase()) || 
             words[selectedWord].blueChars.includes(letter.displaychar.toLowerCase())
-        ))) {
+        )) {
             hud(`Letter '${letter.displaychar}' is invalid.`);
             return;
         } else {
@@ -340,11 +347,13 @@ function enterKeyPressEvent() {
             }
         }
     }
+    if (noWordRepeat && solvedWords.includes(inputWord)) {
+        hud(`'${inputWord}' has already been solved.`);
+        return;
+    }
+    guesses++;
     if (!validWords.includes(inputWord)) {
         hud(`'${inputWord}' is not a word.`);
-        return;
-    } else if (noWordRepeat && solvedWords.includes(inputWord)) {
-        hud(`'${inputWord}' has already been solved.`);
         return;
     } else {
         let pos = selectedWord.slice(1).split(',');
@@ -640,6 +649,17 @@ function drawToCanvas() {
     updateKB();
 }
 
+function testIfSolved() {
+    for (const [_, word] of Object.entries(words)) {
+        for (const letter of word.letters) {
+            if (letter.status != "GREEN") {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 function updateKB() {
     for (const char of alphabet) {
         if (bannedChars.includes(char)) {
@@ -654,7 +674,14 @@ function updateKB() {
             document.getElementById(char).style.color = "#000000";
         }
     }
-    document.getElementById("possibilities").textContent = `Possibilities: ${countPossibilities()}`;
+    let p;
+    if (complete || testIfSolved()) {
+        p = 0;
+        complete = true;
+    } else {
+        p = countPossibilities();
+    }
+    document.getElementById("possibilities").textContent = `Possibilities: ${p}`;
 }
 
 function fixCanvasSize() {
@@ -732,10 +759,20 @@ function fixKeyboardScaling() {
 let hudTime = 0;
 
 function tick() {
-    if (timer != 0) {
+    if (timer != 0 && !complete) {
         timer++;
     }
     document.getElementById("timer").textContent = `Time: ${Math.floor(timer/7200).toString().padStart(2,"0")}:${(Math.floor((timer/120))%60).toString().padStart(2,"0")}`;
+    if (complete) {
+        document.getElementById("timer").style.color = "rgb(0,0,255)";
+    }
+    let accuracy;
+    if (guesses == 0) {
+        accuracy = 0;
+    } else {
+        accuracy = 100*solvedWords.length/guesses;
+    }
+    document.getElementById("acc").textContent = `Accuracy: ${Math.round(accuracy)}%`;
     if (heldKeys.includes("ArrowDown")) {
         canvasPosition[1] += 5;
     } else if (heldKeys.includes("ArrowUp")) {
