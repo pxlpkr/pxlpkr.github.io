@@ -775,12 +775,16 @@ function tick() {
     document.getElementById("acc").textContent = `Accuracy: ${Math.round(accuracy)}%`;
     if (heldKeys.includes("ArrowDown")) {
         canvasPosition[1] += 5;
+        drawToCanvas();
     } else if (heldKeys.includes("ArrowUp")) {
         canvasPosition[1] -= 5;
+        drawToCanvas();
     } else if (heldKeys.includes("ArrowLeft")) {
         canvasPosition[0] -= 5;
+        drawToCanvas();
     } else if (heldKeys.includes("ArrowRight")) {
         canvasPosition[0] += 5;
+        drawToCanvas();
     }
     if (document.getElementById("headsup").textContent != "") {
         if (hudTime < 600) {
@@ -790,7 +794,6 @@ function tick() {
             hudTime = 0;
         }
     }
-    drawToCanvas();
 }
   
 window.onload = function() {  
