@@ -1,6 +1,5 @@
-# pxlpkr.github.io @ pxlpkr
+# Crosswordle @ pxlpkr.github.io
 
-**Crosswordle**\
 It's Wordle, but green letters spawn new Wordles.
 The game ends once no more words can spawn and all words are filled.
 
