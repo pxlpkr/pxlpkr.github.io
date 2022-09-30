@@ -91,6 +91,20 @@ body {
     bottom: 0px;
 }
 
+.nudget {
+    bottom: 28px;
+}
+
+.locktm {
+    position: absolute;
+    left: 50%;
+    width: 100vh;
+    text-align: center;
+    margin-left: -50vh;
+    top: 0px;
+    font-size: 26px;
+}
+
 /* button {
     width: 120px;
     height: 50px;

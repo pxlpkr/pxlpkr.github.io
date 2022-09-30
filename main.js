@@ -1,7 +1,7 @@
 //Options
 forceYellowLetters = true;
 noBannedLetters = true;
-noWordRepeat = false;
+noWordRepeat = true;
 
 absurdMode = false;
 snowballMode = false;
@@ -73,7 +73,9 @@ let canvasScale = 1;
 let clientX;
 let clientY;
 let selectedWord = "h0,0";
-letterMap = ["0:0","1:0","2:0","3:0","4:0"];
+let letterMap = ["0:0","1:0","2:0","3:0","4:0"];
+
+let timer = 0;
 
 let heldKeys = [];
 
@@ -253,6 +255,10 @@ function nMove(event) {
     }
 }
 
+function hud(msg) {
+    document.getElementById("headsup").textContent = msg;
+}
+
 document.addEventListener ("keyup", function(event) {
     if (["ArrowDown","ArrowUp","ArrowLeft","ArrowRight"].includes(event.key)) {
         heldKeys = aRem(heldKeys, event.key);
@@ -273,7 +279,7 @@ document.addEventListener ("keydown", function(event) {
     } else if (event.key == "Enter") {
         enterKeyPressEvent();
     } else if (event.key == "\\") {
-        console.log("Hard mode engaged.");
+        hud("Activated absurd mode.")
         validAnswers = validWords;
     } else if (["ArrowDown","ArrowUp","ArrowLeft","ArrowRight"].includes(event.key)) {
         if (!heldKeys.includes(event.key)) {
@@ -311,12 +317,16 @@ function backKeyPressEvent() {
 }
 
 function enterKeyPressEvent() {
+    if (timer == 0) {
+        timer = 1;
+    }
     let inputWord = "";
     for (const letter of words[selectedWord].letters) {
         if (letter.displaychar == "" || (noBannedLetters && letter.status == "WHITE" && (
             bannedChars.includes(letter.displaychar.toLowerCase()) || 
             words[selectedWord].blueChars.includes(letter.displaychar.toLowerCase())
         ))) {
+            hud(`Letter '${letter.displaychar}' is invalid.`);
             return;
         } else {
             inputWord += letter.displaychar.toLowerCase();
@@ -325,14 +335,17 @@ function enterKeyPressEvent() {
     if (forceYellowLetters) {
         for (const char of words[selectedWord].yellowChars) {
             if (!inputWord.includes(char)) {
+                hud(`Letter '${char}' must be used`);
                 return;
             }
         }
     }
     if (!validWords.includes(inputWord)) {
-        console.log("Invalid word");
+        hud(`'${inputWord}' is not a word.`);
+        return;
     } else if (noWordRepeat && solvedWords.includes(inputWord)) {
-        console.log("Already solved")
+        hud(`'${inputWord}' has already been solved.`);
+        return;
     } else {
         let pos = selectedWord.slice(1).split(',');
         pos = aFunc(pos, parseInt);
@@ -688,6 +701,10 @@ function fixKeyboardScaling() {
             document.getElementById(k).style.borderColor = "#0000ff";
         });
     }
+    document.getElementById("settings").addEventListener("click", () => {
+        document.getElementById("settings").style.borderColor = "#000000";
+        drawToCanvas();
+    });
     document.getElementById("enter").addEventListener("click", () => {
         document.getElementById("enter").style.borderColor = "#000000";
         enterKeyPressEvent();
@@ -712,7 +729,13 @@ function fixKeyboardScaling() {
     });
 }
 
+let hudTime = 0;
+
 function tick() {
+    if (timer != 0) {
+        timer++;
+    }
+    document.getElementById("timer").textContent = `Time: ${Math.floor(timer/7200).toString().padStart(2,"0")}:${(Math.floor((timer/120))%60).toString().padStart(2,"0")}`;
     if (heldKeys.includes("ArrowDown")) {
         canvasPosition[1] += 5;
     } else if (heldKeys.includes("ArrowUp")) {
@@ -721,6 +744,14 @@ function tick() {
         canvasPosition[0] -= 5;
     } else if (heldKeys.includes("ArrowRight")) {
         canvasPosition[0] += 5;
+    }
+    if (document.getElementById("headsup").textContent != "") {
+        if (hudTime < 600) {
+            hudTime++;
+        } else {
+            document.getElementById("headsup").textContent = "";
+            hudTime = 0;
+        }
     }
     drawToCanvas();
 }
