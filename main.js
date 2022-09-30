@@ -140,7 +140,10 @@ let words = {
     "h0,0": new Word(getWord())
 };
 
-document.addEventListener ("mousedown", function(event) {
+document.addEventListener("mousedown", mouseDown);
+document.addEventListener("touchstart", mouseDown);
+
+function mouseDown(event) {
     if (event.button == 0 && event.clientY < res[1]*0.7) {
         clientX = event.clientX
         clientY = event.clientY
@@ -149,9 +152,12 @@ document.addEventListener ("mousedown", function(event) {
         dragging = false;
         musDown = true;
     }
-});
+}
 
-document.addEventListener ("mouseup", function(event) {
+document.addEventListener("mouseup", mouseUp);
+document.addEventListener("touchend", mouseUp);
+
+function mouseUp(event) {
     if (event.button == 0) {
         musDown = false;
         if (clientX != undefined){
@@ -194,9 +200,12 @@ document.addEventListener ("mouseup", function(event) {
             }
         }
     }
-});
+}
 
-document.addEventListener ("mousemove", function(event) {
+document.addEventListener("mousemove", mouseMove);
+document.addEventListener("touchmove", mouseMove);
+
+function mouseMove(event) {
     if (event.button == 0 && musDown) {
         if (Math.sqrt(Math.pow(event.clientX-clientX,2)+Math.pow(event.clientY-clientY,2)) > 5) {
             canvasPosition[0] = oldCanvasPosition[0]+(event.clientX-clientX);
@@ -205,7 +214,7 @@ document.addEventListener ("mousemove", function(event) {
             dragging = true;
         }
     }
-});
+}
 
 document.addEventListener ("keyup", function(event) {
     if (["ArrowDown","ArrowUp","ArrowLeft","ArrowRight"].includes(event.key)) {
