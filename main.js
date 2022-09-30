@@ -146,7 +146,7 @@ function getTouches(evt) {
 }
 
 document.addEventListener("mousedown", mouseDown);
-document.addEventListener("touchstart", mouseDown);
+document.addEventListener("touchstart", touchDown);
 
 function mouseDown(event) {
     if (event.button == 0 && event.clientY < res[1]*0.7) {
@@ -229,7 +229,7 @@ function touchUp(event) {
 }
 
 document.addEventListener("mousemove", mouseMove);
-document.addEventListener("touchmove", mouseMove);
+document.addEventListener("touchmove", touchMove);
 
 function touchMove(event) {
     if (musDown) {
