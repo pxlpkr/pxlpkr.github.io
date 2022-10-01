@@ -5,6 +5,7 @@
     text-decoration: none;
     color:var(--color-tone-1);
     overflow: hidden;
+    touch-action: none;
 
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
