@@ -168,7 +168,7 @@ function mouseDown(event) {
 }
 
 function touchDown(event) {
-    const touch = getTouches(evt)[0];
+    const touch = getTouches(event)[0];
     if (touch.clientY < res[1]*0.7) {
         clientX = touch.clientX
         clientY = touch.clientY
@@ -232,7 +232,7 @@ function mouseUp(event) {
 }
 
 function touchUp(event) {
-    const touch = getTouches(evt)[0];
+    const touch = getTouches(event)[0];
     nUp(touch);
 }
 
