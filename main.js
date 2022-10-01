@@ -91,6 +91,9 @@ let bannedChars = [];
 
 let tps = 60;
 
+let touchPinch = false;
+let prevPinch;
+
 function countPossibilities() {
     let finalList = [];
     for (const word of validAnswers) {
@@ -148,9 +151,15 @@ let words = {
     "h0,0": new Word(getWord())
 };
 
-function getTouches(evt) {
-    return evt.touches ||             // browser API
-        evt.originalEvent.touches; // jQuery
+function getTouches(event) {
+    return event.touches ||             // browser API
+        event.originalEvent.touches; // jQuery
+}
+
+function pinchDist(event) {
+    return Math.hypot(
+        event.touches[0].pageX - event.touches[1].pageX,
+        event.touches[0].pageY - event.touches[1].pageY);
 }
 
 document.addEventListener("mousedown", mouseDown);
@@ -168,14 +177,20 @@ function mouseDown(event) {
 }
 
 function touchDown(event) {
-    const touch = getTouches(event)[0];
-    if (touch.clientY < res[1]*0.7) {
-        clientX = touch.clientX
-        clientY = touch.clientY
-        oldCanvasPosition = [...canvasPosition];
-        drawToCanvas();
-        dragging = false;
-        musDown = true;
+    if (event.touches.length === 2) {
+        touchPinch = true;
+        prevPinch = pinchDist(event);
+        //Code
+    } else {
+        const touch = getTouches(event)[0];
+        if (touch.clientY < res[1]*0.7) {
+            clientX = touch.clientX
+            clientY = touch.clientY
+            oldCanvasPosition = [...canvasPosition];
+            drawToCanvas();
+            dragging = false;
+            musDown = true;
+        }
     }
 }
 
@@ -232,15 +247,45 @@ function mouseUp(event) {
 }
 
 function touchUp(event) {
-    const touch = getTouches(event)[0];
-    nUp(touch);
+    if (touchPinch) {
+        touchPinch = false;
+    } else {
+        const touch = getTouches(event)[0];
+        nUp(touch);
+    }
 }
 
 document.addEventListener("mousemove", mouseMove);
 document.addEventListener("touchmove", touchMove);
 
 function touchMove(event) {
-    if (musDown) {
+    if (touchPinch) {
+        let nPinch = pinchDist(event);
+        let pos = [
+            (event.touches[0].pageX+event.touches[1].pageX)/2,
+            (event.touches[0].pageY+event.touches[1].pageY)/2
+        ];
+        //zoom!!!
+        let zoomStrength = 1.05;
+        let zoomMax = 2;
+        let zoomMin = 0.25;
+        if (nPinch > prevPinch){
+            if (canvasScale < zoomMax) {
+                canvasScale *= zoomStrength;
+                canvasPosition[0] = pos[0]-((pos[0]-canvasPosition[0])*zoomStrength)
+                canvasPosition[1] = pos[1]-((pos[1]-canvasPosition[1])*zoomStrength)
+            }
+        } else if (nPinch < prevPinch) {
+            if (canvasScale > zoomMin){
+                canvasScale /= zoomStrength;
+                canvasPosition[0] = pos[0]-((pos[0]-canvasPosition[0])/zoomStrength)
+                canvasPosition[1] = pos[1]-((pos[1]-canvasPosition[1])/zoomStrength)
+            }
+        }
+        prevPinch = nPinch;
+        drawToCanvas();
+        //code
+    } if (musDown) {
         const touch = event.touches[0];
         nMove(touch);
     }
