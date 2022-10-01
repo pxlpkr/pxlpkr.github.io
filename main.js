@@ -64,6 +64,7 @@ class Word {
 const baseBoxFontSize = 56;
 const minorBoxFontSize = 16;
 const alphabet = "abcdefghijklmnopqrstuvwxyz";
+const gred = ["GREEN","RED"];
 
 let dragging = true;
 let musDown = false;
@@ -87,6 +88,8 @@ let res = [];
 let usedWords = [];
 let solvedWords = [];
 let bannedChars = [];
+
+let tps = 60;
 
 function countPossibilities() {
     let finalList = [];
@@ -358,7 +361,6 @@ function enterKeyPressEvent() {
     } else {
         let pos = selectedWord.slice(1).split(',');
         pos = aFunc(pos, parseInt);
-        let gred = ["GREEN","RED"];
         if (inputWord == words[selectedWord].word) {
             solvedWords.push(inputWord);
         }
@@ -652,7 +654,7 @@ function drawToCanvas() {
 function testIfSolved() {
     for (const [_, word] of Object.entries(words)) {
         for (const letter of word.letters) {
-            if (letter.status != "GREEN") {
+            if (!gred.includes(letter.status)) {
                 return false;
             }
         }
@@ -762,7 +764,7 @@ function tick() {
     if (timer != 0 && !complete) {
         timer++;
     }
-    document.getElementById("timer").textContent = `Time: ${Math.floor(timer/7200).toString().padStart(2,"0")}:${(Math.floor((timer/120))%60).toString().padStart(2,"0")}`;
+    document.getElementById("timer").textContent = `Time: ${Math.floor(timer/(60*tps)).toString().padStart(2,"0")}:${(Math.floor((timer/tps))%60).toString().padStart(2,"0")}`;
     if (complete) {
         document.getElementById("timer").style.color = "rgb(0,0,255)";
     }
@@ -774,20 +776,20 @@ function tick() {
     }
     document.getElementById("acc").textContent = `Accuracy: ${Math.round(accuracy)}%`;
     if (heldKeys.includes("ArrowDown")) {
-        canvasPosition[1] += 5;
+        canvasPosition[1] += 10;
         drawToCanvas();
     } else if (heldKeys.includes("ArrowUp")) {
-        canvasPosition[1] -= 5;
+        canvasPosition[1] -= 10;
         drawToCanvas();
     } else if (heldKeys.includes("ArrowLeft")) {
-        canvasPosition[0] -= 5;
+        canvasPosition[0] -= 10;
         drawToCanvas();
     } else if (heldKeys.includes("ArrowRight")) {
-        canvasPosition[0] += 5;
+        canvasPosition[0] += 10;
         drawToCanvas();
     }
     if (document.getElementById("headsup").textContent != "") {
-        if (hudTime < 600) {
+        if (hudTime < 5*tps) {
             hudTime++;
         } else {
             document.getElementById("headsup").textContent = "";
@@ -800,5 +802,5 @@ window.onload = function() {
     fixCanvasSize();
     drawToCanvas();
     fixKeyboardScaling();
-    setInterval(tick, 1000/120);
+    setInterval(tick, 1000/tps);
 }
