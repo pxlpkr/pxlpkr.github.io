@@ -177,6 +177,7 @@ function mouseDown(event) {
 }
 
 function touchDown(event) {
+    event.preventDefault();
     if (event.touches.length === 2) {
         touchPinch = true;
         prevPinch = pinchDist(event);
@@ -247,6 +248,7 @@ function mouseUp(event) {
 }
 
 function touchUp(event) {
+    event.preventDefault();
     if (touchPinch) {
         touchPinch = false;
     } else {
@@ -259,6 +261,7 @@ document.addEventListener("mousemove", mouseMove);
 document.addEventListener("touchmove", touchMove);
 
 function touchMove(event) {
+    event.preventDefault();
     if (touchPinch) {
         let nPinch = pinchDist(event);
         let pos = [
