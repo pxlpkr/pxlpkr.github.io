@@ -154,7 +154,7 @@ body {
 }
 
 #tutorial {
-    display: "none";
+    display: none;
     z-index: 4;
     position: absolute;
     top: 50%;
@@ -168,7 +168,7 @@ body {
 }
 
 #tutorialoverlay {
-    display: "none";
+    display: none;
     z-index: 3;
     position: absolute;
     height: 100vh;

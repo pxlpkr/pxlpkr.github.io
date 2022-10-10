@@ -754,7 +754,6 @@ function fixCanvasSize() {
 }
 
 function fixKeyboardScaling() {
-    console.log(document.cookie);
     if (!document.cookie.includes("helpDismissed=true")) {
         document.getElementById("tutorial").style.display = "block";
         document.getElementById("tutorialoverlay").style.display = "block";
