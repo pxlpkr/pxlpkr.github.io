@@ -64,6 +64,7 @@ class Word {
 const baseBoxFontSize = 56;
 const minorBoxFontSize = 16;
 const alphabet = "abcdefghijklmnopqrstuvwxyz";
+const fittedkeys = [...alphabet.split(""), "help","settings"];
 const gred = ["GREEN","RED"];
 
 let dragging = true;
@@ -320,6 +321,9 @@ document.addEventListener ("keyup", function(event) {
 });
 
 document.addEventListener ("keydown", function(event) {
+    if (document.getElementById("tutorial").style.display != "none") {
+        return;
+    }
     if (alphabet.includes(event.key)) {
         for (const letter of words[selectedWord].letters) {
             if (letter.status == "WHITE" && letter.displaychar == "") {
@@ -750,13 +754,19 @@ function fixCanvasSize() {
 }
 
 function fixKeyboardScaling() {
+    if (!document.cookie.includes("helpDismissed=true")) {
+        document.getElementById("tutorial").style.display = "block";
+        document.getElementById("tutorialoverlay").style.display = "block";
+    }
     let maxHeight = res[1]*0.3/3.5;
     let maxWidth = res[0]/22;
     let desired = Math.min(maxHeight,maxWidth);
-    for (const char of alphabet) {
+    for (const char of fittedkeys) {
         document.getElementById(char).style.width = `${desired}px`;
         document.getElementById(char).style.height = `${desired}px`;
         document.getElementById(char).style.fontSize = `${desired*25/40}px`;
+    }
+    for (const char of alphabet) {
         document.getElementById(char).addEventListener("click", () => {
             document.getElementById(char).style.borderColor = "#000000";
             for (const letter of words[selectedWord].letters) {
@@ -771,7 +781,7 @@ function fixKeyboardScaling() {
             document.getElementById(char).style.borderColor = "#0000ff";
         });
     }
-    for (const k of ["enter","resign","enteri","back","settings"]) {
+    for (const k of ["enter","resign","enteri","back","settings","help"]) {
         document.getElementById(k).style.height = `${desired}px`;
         document.getElementById(k).style.fontSize = `${desired*25/40}px`;
         document.getElementById(k).addEventListener("mousedown", () => {
@@ -782,9 +792,21 @@ function fixKeyboardScaling() {
         document.getElementById("settings").style.borderColor = "#000000";
         drawToCanvas();
     });
+    document.getElementById("tclosemenu").addEventListener("click", () => {
+        document.cookie = "helpDismissed=true; expires=Thu, 18 Dec 2100 12:00:00 UTC";
+        document.getElementById("tutorial").style.display = "none";
+        document.getElementById("tutorialoverlay").style.display = "none";
+        drawToCanvas();
+    });
     document.getElementById("enter").addEventListener("click", () => {
         document.getElementById("enter").style.borderColor = "#000000";
         enterKeyPressEvent();
+        drawToCanvas();
+    });
+    document.getElementById("help").addEventListener("click", () => {
+        document.getElementById("help").style.borderColor = "#000000";
+        document.getElementById("tutorial").style.display = "block";
+        document.getElementById("tutorialoverlay").style.display = "block";
         drawToCanvas();
     });
     document.getElementById("back").addEventListener("click", () => {
@@ -846,7 +868,7 @@ function tick() {
     }
 }
   
-window.onload = function() {  
+window.onload = function() {
     fixCanvasSize();
     drawToCanvas();
     fixKeyboardScaling();
