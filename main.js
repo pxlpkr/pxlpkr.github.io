@@ -321,7 +321,7 @@ document.addEventListener ("keyup", function(event) {
 });
 
 document.addEventListener ("keydown", function(event) {
-    if (document.getElementById("tutorial").style.display != "none") {
+    if (["none",""].includes(document.getElementById("tutorial").style.display)) {
         return;
     }
     if (alphabet.includes(event.key)) {
