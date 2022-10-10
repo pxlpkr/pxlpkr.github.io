@@ -754,6 +754,7 @@ function fixCanvasSize() {
 }
 
 function fixKeyboardScaling() {
+    console.log(document.cookie);
     if (!document.cookie.includes("helpDismissed=true")) {
         document.getElementById("tutorial").style.display = "block";
         document.getElementById("tutorialoverlay").style.display = "block";
@@ -793,7 +794,7 @@ function fixKeyboardScaling() {
         drawToCanvas();
     });
     document.getElementById("tclosemenu").addEventListener("click", () => {
-        document.cookie = "helpDismissed=true; expires=Thu, 18 Dec 2100 12:00:00 UTC";
+        document.cookie = "helpDismissed=true";
         document.getElementById("tutorial").style.display = "none";
         document.getElementById("tutorialoverlay").style.display = "none";
         drawToCanvas();
