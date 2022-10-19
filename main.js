@@ -390,7 +390,7 @@ function enterKeyPressEvent() {
             bannedChars.includes(letter.displaychar.toLowerCase()) || 
             words[selectedWord].blueChars.includes(letter.displaychar.toLowerCase())
         )) {
-            hud(`Letter '${letter.displaychar}' is invalid.`);
+            hud(`Letter '${letter.displaychar.toUpperCase()}' is invalid.`);
             return;
         } else {
             inputWord += letter.displaychar.toLowerCase();
@@ -399,7 +399,7 @@ function enterKeyPressEvent() {
     if (forceYellowLetters) {
         for (const char of words[selectedWord].yellowChars) {
             if (!inputWord.includes(char)) {
-                hud(`Letter '${char}' must be used`);
+                hud(`Letter '${char.toUpperCase()}' must be used`);
                 return;
             }
         }
