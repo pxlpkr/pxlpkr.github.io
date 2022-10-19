@@ -314,13 +314,13 @@ function hud(msg) {
     document.getElementById("headsup").textContent = msg;
 }
 
-document.addEventListener ("keyup", function(event) {
+document.addEventListener("keyup", function(event) {
     if (["ArrowDown","ArrowUp","ArrowLeft","ArrowRight"].includes(event.key)) {
         heldKeys = aRem(heldKeys, event.key);
     } 
 });
 
-document.addEventListener ("keydown", function(event) {
+document.addEventListener("keydown", function(event) {
     if (document.getElementById("tutorial").style.display == "block") {
         return;
     }
@@ -376,6 +376,8 @@ function backKeyPressEvent() {
 }
 
 function enterKeyPressEvent() {
+    document.getElementById("absurdModeSetting").disabled = true;
+    document.getElementById("snowballModeSetting").disabled = true;
     if (timer == 0 && !complete) {
         timer = 1;
     }
@@ -699,6 +701,28 @@ function drawToCanvas() {
                 }
             }
         }
+        let textCount = 1;
+        if (absurdMode) {
+            context.font = Math.round(16)+"px Helvetica";
+            context.fillText("Absurd Mode", 4, -2+20*textCount);
+            textCount++;
+        } if (snowballMode) {
+            context.font = Math.round(16)+"px Helvetica";
+            context.fillText("Snowball Mode", 4, -2+20*textCount);
+            textCount++;
+        } if (!forceYellowLetters) {
+            context.font = Math.round(16)+"px Helvetica";
+            context.fillText("Yellow Letters Cheat", 4, -2+20*textCount);
+            textCount++;
+        } if (!noBannedLetters) {
+            context.font = Math.round(16)+"px Helvetica";
+            context.fillText("Banned Letters Cheat", 4, -2+20*textCount);
+            textCount++;
+        } if (!noWordRepeat) {
+            context.font = Math.round(16)+"px Helvetica";
+            context.fillText("Word Repeat Cheat", 4, -2+20*textCount);
+            textCount++;
+        } 
     }
     updateKB();
 }
@@ -753,7 +777,7 @@ function fixCanvasSize() {
     res = [document.body.clientWidth,canvasHeight];
 }
 
-function fixKeyboardScaling() {
+function fixElements() {
     if (!document.cookie.includes("helpDismissed=true")) {
         document.getElementById("tutorial").style.display = "block";
         document.getElementById("tutorialoverlay").style.display = "block";
@@ -790,11 +814,18 @@ function fixKeyboardScaling() {
     }
     document.getElementById("settings").addEventListener("click", () => {
         document.getElementById("settings").style.borderColor = "#000000";
+        document.getElementById("settingsMenu").style.display = "block";
+        document.getElementById("tutorialoverlay").style.display = "block";
         drawToCanvas();
     });
     document.getElementById("tclosemenu").addEventListener("click", () => {
         document.cookie = "helpDismissed=true";
         document.getElementById("tutorial").style.display = "none";
+        document.getElementById("tutorialoverlay").style.display = "none";
+        drawToCanvas();
+    });
+    document.getElementById("sclosemenu").addEventListener("click", () => {
+        document.getElementById("settingsMenu").style.display = "none";
         document.getElementById("tutorialoverlay").style.display = "none";
         drawToCanvas();
     });
@@ -813,6 +844,41 @@ function fixKeyboardScaling() {
         document.getElementById("back").style.borderColor = "#000000";
         backKeyPressEvent();
         drawToCanvas();
+    });
+    document.getElementById("allowWordRepeatSetting").addEventListener("click", () => {
+        noWordRepeat =  !noWordRepeat;
+        document.getElementById("allowWordRepeatSetting").disabled = true;
+        drawToCanvas();
+    });
+    document.getElementById("allowBannedLettersSetting").addEventListener("click", () => {
+        noBannedLetters =  !noBannedLetters;
+        document.getElementById("allowBannedLettersSetting").disabled = true;
+        drawToCanvas();
+    });
+    document.getElementById("dontForceYellowLettersSetting").addEventListener("click", () => {
+        forceYellowLetters =  !forceYellowLetters;
+        document.getElementById("dontForceYellowLettersSetting").disabled = true;
+        drawToCanvas();
+    });
+    document.getElementById("snowballModeSetting").addEventListener("click", () => {
+        if (Object.keys(words).length == 1) {
+            snowballMode = true;
+            for (const letter of words["h0,0"].letters) {
+                letter.displaychar = letter.char;
+            }
+            enterKeyPressEvent();
+            document.getElementById("snowballModeSetting").disabled = true;
+            drawToCanvas();
+        }
+    });
+    document.getElementById("absurdModeSetting").addEventListener("click", () => {
+        if (Object.keys(words).length == 1) {
+            absurdMode = true;
+            validAnswers = validWords;
+            words["h0,0"] = new Word(getWord());
+            document.getElementById("absurdModeSetting").disabled = true;
+            drawToCanvas();
+        }
     });
     document.getElementById("resign").addEventListener("click", () => {
         document.getElementById("resign").style.borderColor = "#000000";
@@ -871,6 +937,6 @@ function tick() {
 window.onload = function() {
     fixCanvasSize();
     drawToCanvas();
-    fixKeyboardScaling();
+    fixElements();
     setInterval(tick, 1000/tps);
 }
