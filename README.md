@@ -9,7 +9,7 @@ Info:\
         Blue letters are not in the selected word, but are in one of the others.\
 Rules:\
         You cannot use gray or blue letters, if any exist.\
-        You must use all discovetred yellow letters.\
+        You must use all discovered yellow letters.\
         You cannot guess a word that has already been solved somewhere else.\
 Controls:\
         Left Click to select a Wordle.\
