@@ -337,9 +337,11 @@ document.addEventListener("keydown", function(event) {
     } else if (event.key == "Enter") {
         enterKeyPressEvent();
     } else if (event.key == "\\" && timer == 0) {
-        hud("Activated absurd mode.")
+        absurdMode = true;
         validAnswers = validWords;
         words["h0,0"] = new Word(getWord());
+        document.getElementById("absurdModeSetting").disabled = true;
+        hud("Activated absurd mode.")
     } else if (["ArrowDown","ArrowUp","ArrowLeft","ArrowRight"].includes(event.key)) {
         if (!heldKeys.includes(event.key)) {
             heldKeys.push(event.key);
@@ -861,7 +863,7 @@ function fixElements() {
         drawToCanvas();
     });
     document.getElementById("snowballModeSetting").addEventListener("click", () => {
-        if (Object.keys(words).length == 1) {
+        if (timer == 0) {
             snowballMode = true;
             for (const letter of words["h0,0"].letters) {
                 letter.displaychar = letter.char;
@@ -872,7 +874,7 @@ function fixElements() {
         }
     });
     document.getElementById("absurdModeSetting").addEventListener("click", () => {
-        if (Object.keys(words).length == 1) {
+        if (timer == 0) {
             absurdMode = true;
             validAnswers = validWords;
             words["h0,0"] = new Word(getWord());
