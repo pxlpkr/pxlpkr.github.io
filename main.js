@@ -324,7 +324,7 @@ document.addEventListener("keydown", function(event) {
     if (document.getElementById("tutorial").style.display == "block") {
         return;
     }
-    if (alphabet.includes(event.key)) {
+    if (alphabet.includes(event.key.toLowerCase())) {
         for (const letter of words[selectedWord].letters) {
             if (letter.status == "WHITE" && letter.displaychar == "") {
                 letter.displaychar = event.key;
