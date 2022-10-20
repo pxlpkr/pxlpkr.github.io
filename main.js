@@ -336,7 +336,7 @@ document.addEventListener("keydown", function(event) {
         backKeyPressEvent();
     } else if (event.key == "Enter") {
         enterKeyPressEvent();
-    } else if (event.key == "\\" && timer == 0) {
+    } else if (event.key == "\\" && timer == 0 && !absurdMode) {
         absurdMode = true;
         validAnswers = validWords;
         words["h0,0"] = new Word(getWord());
