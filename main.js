@@ -117,7 +117,11 @@ function countPossibilities() {
     return finalList.length;
 }
 
-function getWord(required = null, begin_c = 4, end_c = 4) {
+function codify(word) {
+    usedWords.push(word);
+}
+
+function getWord(required = null, begin_c = 40, end_c = 40) {
     let newAnsList = [];
     for (const w of validAnswers) {
         let valid = true;
@@ -131,7 +135,7 @@ function getWord(required = null, begin_c = 4, end_c = 4) {
                 valid = false;
             } else if (w.slice(begin_c+1).includes(required)) {
                 valid = false;
-            } else if (w.slice(0,4-end_c).includes(required)) {
+            } else if (w.slice(0,w.length-1-end_c).includes(required)) {
                 valid = false;
             }
         }
@@ -144,7 +148,6 @@ function getWord(required = null, begin_c = 4, end_c = 4) {
     }
     if (newAnsList.length > 0) {
         let result = newAnsList.choice();
-        usedWords.push(result);
         return result;
     } else {
         return null;
@@ -154,6 +157,7 @@ function getWord(required = null, begin_c = 4, end_c = 4) {
 let words = {
     "h0,0": new Word(getWord())
 };
+codify(words["h0,0"].word)
 
 function getTouches(event) {
     return event.touches ||             // browser API
@@ -210,12 +214,13 @@ function nUp(event) {
             pos = aFunc(pos, parseInt);
             let npos = pose(pos);
             if (word.orientation == "H") {
-                if (pointInRect(mousePosition,[npos[0],npos[1],400*canvasScale,80*canvasScale])) {
+                if (pointInRect(mousePosition,[npos[0],npos[1],80*word.word.length*canvasScale,80*canvasScale])) {
                     for (const [c,letter] of Object.entries(word.letters)) {
                         if (letter.status == "WHITE") {
                             if (pointInRect(mousePosition,[npos[0]+80*canvasScale*c,npos[1],80*canvasScale,80*canvasScale])) {
                                 selectedWord = `h${pos[0]},${pos[1]}`;
                                 drawToCanvas();
+                                updateKB();
                                 return;
                             }
                         }
@@ -223,12 +228,13 @@ function nUp(event) {
                 }
             }
             else if (word.orientation == "V") {
-                if (pointInRect(mousePosition,[npos[0],npos[1],80*canvasScale,400*canvasScale])) {
+                if (pointInRect(mousePosition,[npos[0],npos[1],80*canvasScale,80*word.word.length*canvasScale])) {
                     for (const [c,letter] of Object.entries(word.letters)) {
                         if (letter.status == "WHITE") {
                             if (pointInRect(mousePosition,[npos[0],npos[1]+80*canvasScale*c,80*canvasScale,80*canvasScale])) {
                                 selectedWord = `v${pos[0]},${pos[1]}`;
                                 drawToCanvas();
+                                updateKB();
                                 return;
                             }
                         }
@@ -343,6 +349,7 @@ document.addEventListener("keydown", function(event) {
         absurdMode = true;
         validAnswers = validWords;
         words["h0,0"] = new Word(getWord());
+        codify(words["h0,0"].word)
         document.getElementById("absurdModeSetting").disabled = true;
         hud("Activated absurd mode.")
     } else if (["ArrowDown","ArrowUp","ArrowLeft","ArrowRight"].includes(event.key)) {
@@ -414,7 +421,7 @@ function enterKeyPressEvent() {
         return;
     }
     guesses++;
-    if (!validWords.includes(inputWord)) {
+    if (!validWords.includes(inputWord) && !validAnswers.includes(inputWord)) {
         hud(`'${inputWord}' is not a word.`);
         return;
     } else {
@@ -443,15 +450,15 @@ function enterKeyPressEvent() {
                 let beginConstr;
                 let endConstr;
                 if (words[selectedWord].orientation == "H") {
-                    beginConstr = 5;
-                    for (let i = 0; i < 5; i++) {
+                    beginConstr = words[selectedWord].word.length;
+                    for (let i = 0; i < words[selectedWord].word.length; i++) {
                         if (letterMap.includes(`${pos[0]+c}:${pos[1]-1-i}`) || letterMap.includes(`${pos[0]+c-1}:${pos[1]-1-i}`) || letterMap.includes(`${pos[0]+c+1}:${pos[1]-1-i}`)) {
                             beginConstr = i
                             break;
                         }
                     }
-                    endConstr = 5;
-                    for (let i = 0; i < 5; i++) {
+                    endConstr = words[selectedWord].word.length;
+                    for (let i = 0; i < words[selectedWord].word.length; i++) {
                         if (letterMap.includes(`${pos[0]+c}:${pos[1]+1+i}`) || letterMap.includes(`${pos[0]+c-1}:${pos[1]+1+i}`) || letterMap.includes(`${pos[0]+c+1}:${pos[1]+1+i}`)) {
                             endConstr = i;
                             break;
@@ -459,58 +466,57 @@ function enterKeyPressEvent() {
                     }
                 }
                 else if (words[selectedWord].orientation == "V") {
-                    beginConstr = 5;
-                    for (let i = 0; i < 5; i++) {
+                    beginConstr = words[selectedWord].word.length;
+                    for (let i = 0; i < words[selectedWord].word.length; i++) {
                         if (letterMap.includes(`${pos[0]-1-i}:${pos[1]+c}`) || letterMap.includes(`${pos[0]-1-i}:${pos[1]+c-1}`) ||  letterMap.includes(`${pos[0]-1-i}:${pos[1]+c+1}`)) {
                             beginConstr = i;
                             break;
                         }
                     }
-                    endConstr = 5;
-                    for (let i = 0; i < 5; i++) {
+                    endConstr = words[selectedWord].word.length;
+                    for (let i = 0; i < words[selectedWord].word.length; i++) {
                         if (letterMap.includes(`${pos[0]+1+i}:${pos[1]+c}`) || letterMap.includes(`${pos[0]+1+i}:${pos[1]+c-1}`) || letterMap.includes(`${pos[0]+1+i}:${pos[1]+c+1}`)) {
                             endConstr = i;
                             break;
                         }
                     }
                 }
-                if (beginConstr+endConstr+1 >= 5 && ![beginConstr,endConstr].includes(0)) {
-                    let newWord = getWord(inputWord[c],beginConstr-1,endConstr-1);
-                    if (newWord != null) {
-                        founds = newWord.split("").reduce((z1, z2, z3) => {
-                            if(z2 == inputWord[c]) z1.push(z3);
-                            return z1;
-                        }, []);
-                        let index = founds.choice();
-                        if (words[selectedWord].orientation == "H") {
-                            newID = `v${pos[0]+c},${pos[1]-index}`;
-                            ltrID = [pos[0]+c,pos[1]-index];
-                        }
-                        else {
-                            newID = `h${pos[0]-index},${pos[1]+c}`;
-                            ltrID = [pos[0]-index,pos[1]+c];
-                        }
-                        words[newID] = new Word(newWord);
-                        
-                        if (words[selectedWord].orientation == "H") {
-                            words[newID].orientation = "V";
-                        } else {
-                            words[newID].orientation = "H";
-                        }
-                        words[newID].letters[index].status = "GREEN";
-                        words[newID].letters[index].displaychar = inputWord[c];
-                        if (words[newID].orientation == "V") {
-                            for (let i = 0; i < 5; i++) {
-                                if (!letterMap.includes(`${ltrID[0]}:${ltrID[1]+i}`)) {
-                                    letterMap.push(`${ltrID[0]}:${ltrID[1]+i}`);
-                                }
+                let newWord = getWord(inputWord[c],beginConstr-1,endConstr-1);
+                if (newWord != null && beginConstr+endConstr+1 >= newWord.length && ![beginConstr,endConstr].includes(0)) {
+                    codify(newWord);
+                    founds = newWord.split("").reduce((z1, z2, z3) => {
+                        if(z2 == inputWord[c]) z1.push(z3);
+                        return z1;
+                    }, []);
+                    let index = founds.choice();
+                    if (words[selectedWord].orientation == "H") {
+                        newID = `v${pos[0]+c},${pos[1]-index}`;
+                        ltrID = [pos[0]+c,pos[1]-index];
+                    }
+                    else {
+                        newID = `h${pos[0]-index},${pos[1]+c}`;
+                        ltrID = [pos[0]-index,pos[1]+c];
+                    }
+                    words[newID] = new Word(newWord);
+                    
+                    if (words[selectedWord].orientation == "H") {
+                        words[newID].orientation = "V";
+                    } else {
+                        words[newID].orientation = "H";
+                    }
+                    words[newID].letters[index].status = "GREEN";
+                    words[newID].letters[index].displaychar = inputWord[c];
+                    if (words[newID].orientation == "V") {
+                        for (let i = 0; i < words[newID].word.length; i++) {
+                            if (!letterMap.includes(`${ltrID[0]}:${ltrID[1]+i}`)) {
+                                letterMap.push(`${ltrID[0]}:${ltrID[1]+i}`);
                             }
                         }
-                        else if (words[newID].orientation == "H") {
-                            for (let i = 0; i < 5; i++) {
-                                if (!letterMap.includes(`${ltrID[0]+i}:${ltrID[1]}`)) {
-                                    letterMap.push(`${ltrID[0]+i}:${ltrID[1]}`);
-                                }
+                    }
+                    else if (words[newID].orientation == "H") {
+                        for (let i = 0; i < words[newID].word.length; i++) {
+                            if (!letterMap.includes(`${ltrID[0]+i}:${ltrID[1]}`)) {
+                                letterMap.push(`${ltrID[0]+i}:${ltrID[1]}`);
                             }
                         }
                     }
@@ -900,8 +906,10 @@ function fixElements() {
             absurdMode = true;
             validAnswers = validWords;
             words["h0,0"] = new Word(getWord());
+            codify(words["h0,0"].word)
             document.getElementById("absurdModeSetting").disabled = true;
             document.getElementById("ultimateModeSetting").disabled = true;
+            updateKB();
             drawToCanvas();
         }
     });
@@ -915,11 +923,14 @@ function fixElements() {
                 letter.displaychar = letter.char;
             }
         }
+        updateKB();
         drawToCanvas();
     });
     for (const num of [1,5,10,25,450]) {
         document.getElementById(`${num}k`).addEventListener("click", () => {
-            difficultyMenuClicked(num);
+            if (timer == 0) {
+                difficultyMenuClicked(num);
+            }
         })
     }
 }
@@ -932,7 +943,14 @@ function difficultyMenuClicked(num) {
     if (num == 25) {validAnswers = en_25k}
     if (num == 450) {validAnswers = en_450k}
     words["h0,0"] = new Word(getWord());
+    usedWords = [];
+    codify(words["h0,0"].word)
+    letterMap = [];
+    for (let i = 0; i < words["h0,0"].word.length; i++) {
+        letterMap.push(`${i}:0`);
+    }
     updateDifficultyMenus();
+    updateKB();
     drawToCanvas();
 }
 
@@ -972,6 +990,12 @@ function tick() {
             validAnswers = en_1k;
             validWords = en_450k;
             words["h0,0"] = new Word(getWord());
+            codify(words["h0,0"].word)
+            updateKB();
+            letterMap = [];
+            for (let i = 0; i < words["h0,0"].word.length; i++) {
+                letterMap.push(`${i}:0`);
+            }
             awaitingENload = false;
         }
     }
