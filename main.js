@@ -351,6 +351,7 @@ document.addEventListener("keydown", function(event) {
         words["h0,0"] = new Word(getWord());
         codify(words["h0,0"].word)
         document.getElementById("absurdModeSetting").disabled = true;
+        document.getElementById("ultimateModeSetting").disabled = true;
         hud("Activated absurd mode.")
     } else if (["ArrowDown","ArrowUp","ArrowLeft","ArrowRight"].includes(event.key)) {
         if (!heldKeys.includes(event.key)) {
