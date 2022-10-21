@@ -350,6 +350,7 @@ document.addEventListener("keydown", function(event) {
         validAnswers = validWords;
         words["h0,0"] = new Word(getWord());
         codify(words["h0,0"].word)
+        document.getElementById("absurdModeSetting").checked = true;
         document.getElementById("absurdModeSetting").disabled = true;
         document.getElementById("ultimateModeSetting").disabled = true;
         hud("Activated absurd mode.")
@@ -954,6 +955,7 @@ function difficultyMenuClicked(num) {
     updateKB();
     drawToCanvas();
 }
+//Wow
 
 function loadAdditionalWords() {
     var scriptTag = document.createElement('script');
