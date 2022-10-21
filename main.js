@@ -5,6 +5,9 @@ noWordRepeat = true;
 
 absurdMode = false;
 snowballMode = false;
+ultimateMode = false;
+ultimateTier = 1;
+awaitingENload = false;
 
 autofillMode = false;
 
@@ -544,6 +547,7 @@ function enterKeyPressEvent() {
             }
         }
     }
+    updateKB();
 }
 
 document.addEventListener("wheel", function(event) {
@@ -708,6 +712,10 @@ function drawToCanvas() {
             context.font = Math.round(16)+"px Helvetica";
             context.fillText("Absurd Mode", 4, -2+20*textCount);
             textCount++;
+        } if (ultimateMode) {
+            context.font = Math.round(16)+"px Helvetica";
+            context.fillText(`Ultimate Mode: ${ultimateTier}k`, 4, -2+20*textCount);
+            textCount++;
         } if (snowballMode) {
             context.font = Math.round(16)+"px Helvetica";
             context.fillText("Snowball Mode", 4, -2+20*textCount);
@@ -724,9 +732,8 @@ function drawToCanvas() {
             context.font = Math.round(16)+"px Helvetica";
             context.fillText("Word Repeat Cheat", 4, -2+20*textCount);
             textCount++;
-        } 
+        }
     }
-    updateKB();
 }
 
 function testIfSolved() {
@@ -870,6 +877,21 @@ function fixElements() {
             }
             enterKeyPressEvent();
             document.getElementById("snowballModeSetting").disabled = true;
+            document.getElementById("ultimateModeSetting").disabled = true;
+            drawToCanvas();
+        }
+    });
+    document.getElementById("ultimateModeSetting").addEventListener("click", () => {
+        if (timer == 0) {
+            ultimateMode = true;
+            loadAdditionalWords();
+            awaitingENload = true;
+            for (const num of [1,5,10,25,450]) {
+                document.getElementById(`${num}k`).style.display = "inline";
+            }
+            updateDifficultyMenus();
+            document.getElementById("ultimateModeSetting").disabled = true;
+            document.getElementById("absurdModeSetting").disabled = true;
             drawToCanvas();
         }
     });
@@ -879,6 +901,7 @@ function fixElements() {
             validAnswers = validWords;
             words["h0,0"] = new Word(getWord());
             document.getElementById("absurdModeSetting").disabled = true;
+            document.getElementById("ultimateModeSetting").disabled = true;
             drawToCanvas();
         }
     });
@@ -894,6 +917,48 @@ function fixElements() {
         }
         drawToCanvas();
     });
+    for (const num of [1,5,10,25,450]) {
+        document.getElementById(`${num}k`).addEventListener("click", () => {
+            difficultyMenuClicked(num);
+        })
+    }
+}
+
+function difficultyMenuClicked(num) {
+    ultimateTier = num;
+    if (num == 1) {validAnswers = en_1k}
+    if (num == 5) {validAnswers = en_5k}
+    if (num == 10) {validAnswers = en_10k}
+    if (num == 25) {validAnswers = en_25k}
+    if (num == 450) {validAnswers = en_450k}
+    words["h0,0"] = new Word(getWord());
+    updateDifficultyMenus();
+    drawToCanvas();
+}
+
+function loadAdditionalWords() {
+    var scriptTag = document.createElement('script');
+    scriptTag.setAttribute('src',"ultimate.js");
+    document.head.appendChild(scriptTag)
+}
+
+function updateDifficultyMenus() {
+    for (const i of [1,5,10,25,450]) {
+        let element = document.getElementById(`${i}k`);
+        if (i == ultimateTier) {
+            element.style.borderWidth = "0px";
+            element.style.borderRadius = "2px";
+            // element.style.borderColor = "#0c6fc1";
+            element.style.backgroundColor = "#0c6fc1";
+            element.style.color = "#ffffff";
+        } else {
+            element.style.borderRadius = "0px";
+            element.style.borderWidth = "2px";
+            element.style.borderColor = "#000000";
+            element.style.backgroundColor = "#ffffff";
+            element.style.color = "#000000";
+        }
+    }
 }
 
 let hudTime = 0;
@@ -901,6 +966,14 @@ let hudTime = 0;
 function tick() {
     if (timer != 0 && !complete) {
         timer++;
+    }
+    if (awaitingENload) {
+        if (typeof en_1k != 'undefined') {
+            validAnswers = en_1k;
+            validWords = en_450k;
+            words["h0,0"] = new Word(getWord());
+            awaitingENload = false;
+        }
     }
     document.getElementById("timer").textContent = `Time: ${Math.floor(timer/(60*tps)).toString().padStart(2,"0")}:${(Math.floor((timer/tps))%60).toString().padStart(2,"0")}`;
     if (complete) {
@@ -935,10 +1008,11 @@ function tick() {
         }
     }
 }
-  
+
 window.onload = function() {
     fixCanvasSize();
     drawToCanvas();
+    updateKB();
     fixElements();
     setInterval(tick, 1000/tps);
 }
