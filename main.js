@@ -160,8 +160,7 @@ let words = {
 codify(words["h0,0"].word)
 
 function getTouches(event) {
-    return event.touches ||             // browser API
-        event.originalEvent.touches; // jQuery
+    return event.touches || event.originalEvent.touches; // Browser API / jQuery
 }
 
 function pinchDist(event) {
@@ -185,7 +184,6 @@ function mouseDown(event) {
 }
 
 function touchDown(event) {
-    event.preventDefault();
     if (event.touches.length === 2) {
         touchPinch = true;
         prevPinch = pinchDist(event);
@@ -299,8 +297,10 @@ function touchMove(event) {
         drawToCanvas();
         //code
     } if (musDown) {
-        const touch = event.touches[0];
-        nMove(touch);
+        const touch = getTouches(event)[0];
+        if (touch.clientY < res[1]*0.7) {
+            nMove(touch);
+        }
     }
 }
 
@@ -328,6 +328,28 @@ document.addEventListener("keyup", function(event) {
         heldKeys = aRem(heldKeys, event.key);
     } 
 });
+
+function staticZoomIn() {
+    let zoomStrength = 1.25;
+    let zoomMax = 2;
+    if (canvasScale < zoomMax) {
+        canvasScale *= zoomStrength;
+        canvasPosition[0] = res[0]/2-((res[0]/2-canvasPosition[0])*zoomStrength)
+        canvasPosition[1] = res[1]/2-((res[1]/2-canvasPosition[1])*zoomStrength)
+    }
+    drawToCanvas();
+}
+
+function staticZoomOut() {
+    let zoomStrength = 1.25;
+    let zoomMin = 0.25;
+    if (canvasScale > zoomMin) {
+        canvasScale /= zoomStrength;
+        canvasPosition[0] = res[0]/2-((res[0]/2-canvasPosition[0])/zoomStrength)
+        canvasPosition[1] = res[1]/2-((res[1]/2-canvasPosition[1])/zoomStrength)
+    }
+    drawToCanvas();
+}
 
 document.addEventListener("keydown", function(event) {
     if (document.getElementById("tutorial").style.display == "block") {
@@ -359,21 +381,9 @@ document.addEventListener("keydown", function(event) {
             heldKeys.push(event.key);
         }
     } else if (event.key == "-") {
-        let zoomStrength = 1.25;
-        let zoomMin = 0.25;
-        if (canvasScale > zoomMin) {
-            canvasScale /= zoomStrength;
-            canvasPosition[0] = res[0]/2-((res[0]/2-canvasPosition[0])/zoomStrength)
-            canvasPosition[1] = res[1]/2-((res[1]/2-canvasPosition[1])/zoomStrength)
-        }
+        return staticZoomOut();
     } else if (event.key == "=") {
-        let zoomStrength = 1.25;
-        let zoomMax = 2;
-        if (canvasScale < zoomMax) {
-            canvasScale *= zoomStrength;
-            canvasPosition[0] = res[0]/2-((res[0]/2-canvasPosition[0])*zoomStrength)
-            canvasPosition[1] = res[1]/2-((res[1]/2-canvasPosition[1])*zoomStrength)
-        }
+        return staticZoomIn();
     } else {
         return;
     }
