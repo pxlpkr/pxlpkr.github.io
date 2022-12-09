@@ -268,7 +268,6 @@ document.addEventListener("mousemove", mouseMove);
 document.addEventListener("touchmove", touchMove);
 
 function touchMove(event) {
-    event.preventDefault();
     if (touchPinch) {
         let nPinch = pinchDist(event);
         let pos = [
