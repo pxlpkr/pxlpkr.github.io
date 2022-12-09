@@ -256,7 +256,6 @@ function mouseUp(event) {
 }
 
 function touchUp(event) {
-    event.preventDefault();
     if (touchPinch) {
         touchPinch = false;
     } else {
