@@ -260,7 +260,9 @@ function touchUp(event) {
         touchPinch = false;
     } else {
         const touch = getTouches(event)[0];
-        nUp(touch);
+        if (touch.clientY < res[1]*0.7) {
+            nUp(touch);
+        }
     }
 }
 
