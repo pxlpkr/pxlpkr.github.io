@@ -87,6 +87,7 @@ let timer = 0;
 let heldKeys = [];
 
 let res = [];
+let cvres = [];
 
 let usedWords = [];
 let solvedWords = [];
@@ -184,7 +185,7 @@ function mouseDown(event) {
 
 function touchDown(event) {
     const touch = getTouches(event)[0];
-    if (touch.clientY < res[1]*0.7) {
+    if (touch.clientY < cvres[1]) {
         if (event.touches.length === 2) {
             touchPinch = true;
             prevPinch = pinchDist(event);
@@ -255,11 +256,10 @@ function mouseUp(event) {
 }
 
 function touchUp(event) {
-    if (touchPinch) {
-        touchPinch = false;
-    } else {
-        const touch = getTouches(event)[0];
-        if (touch.clientY < res[1]*0.7) {
+    if (touch.clientY < cvres[1]) {
+        if (touchPinch) {
+            touchPinch = false;
+        } else {
             nUp(touch);
         }
     }
@@ -270,7 +270,7 @@ document.addEventListener("touchmove", touchMove);
 
 function touchMove(event) {
     const touch = getTouches(event)[0];
-    if (touch.clientY < res[1]*0.7) {
+    if (touch.clientY < cvres[1]) {
         if (touchPinch) {
             let nPinch = pinchDist(event);
             let pos = [
@@ -801,6 +801,7 @@ function fixCanvasSize() {
     canvas.width = document.body.clientWidth;
     canvas.height = canvasHeight-Math.min(canvasHeight*0.3, 200);
     res = [document.body.clientWidth,canvasHeight];
+    cvres = [canvas.width,canvas.height];
 }
 
 function fixElements() {
