@@ -257,6 +257,7 @@ function mouseUp(event) {
 
 function touchUp(event) {
     if (touch.clientY < cvres[1]) {
+        hud(touch.clientY+"< "+cvres[1])
         if (touchPinch) {
             touchPinch = false;
         } else {
