@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Add CSS -->
     <link rel='stylesheet' type='text/css' href='main.css' media='screen'/>
+
+    <!-- Tab Information -->
+    <title>Crosswordle</title>
     <link href="https://pxlpkr.github.io/favicon.ico" type="image/x-icon" rel="icon">
     <link href="https://pxlpkr.github.io/favicon.ico" type="image/x-icon" rel="shortcut icon">
+
+    <!-- Other stuff -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
-    <title>Crosswordle</title>
 </head>
 <body>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src='main.js'></script>
     <div id="settingsMenu" class="popup">
         <svg id="sclosemenu" class="xButton" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path fill="var(--color-tone-1)" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
@@ -39,7 +43,6 @@
         <button class="miniDifficultySetting" id="25k">25k</button>
         <button class="miniDifficultySetting" id="450k">450k</button>
         <div style="clear:left"></div><br>
-        <!-- <button class="bigSettingButton" id="ultimateModeButton">Ultimate Crosswordle</button> -->
         <p class="ttext tsubtitle">Cheats:</p>
         <label class="switch" style="float:left">
             <input type="checkbox" id="dontForceYellowLettersSetting">
@@ -86,10 +89,8 @@
     </div>
     <div id="tutorialoverlay"></div>
     <canvas id="canvas"></canvas>
-    <button class="zoomButton" id="zoomIn" onclick="staticZoomIn()">+</button>
-    <button class="zoomButton" id="zoomOut" onclick="staticZoomOut()">-</button>
-    <div id="keyboard">
-        <div class="keyrow" id="kr1">
+    <div class="keyboard">
+        <div class="keyrow">
             <button class="key" id="settings">⚙️</button>
             <button class="key" id="q">Q</button>
             <button class="key" id="w">W</button>
@@ -103,8 +104,8 @@
             <button class="key" id="p">P</button>
             <button class="key" id="back">⌫</button>
         </div>
-        <div class="keyrow" id="kr2">
-            <button class="key keyinv" id="enteri">ENTER</button>
+        <div class="keyrow">
+            <button class="key klarge kinv" id="enteri">ENTER</button>
             <button class="key" id="help">?</button>
             <button class="key" id="a">A</button>
             <button class="key" id="s">S</button>
@@ -115,10 +116,10 @@
             <button class="key" id="j">J</button>
             <button class="key" id="k">K</button>
             <button class="key" id="l">L</button>
-            <button class="key" id="enter">ENTER</button>
+            <button class="key klarge" id="enter">ENTER</button>
             <button class="key keyinv" id="helpi">?</button>
         </div>
-        <div class="keyrow" id="kr3">
+        <div class="keyrow">
             <button class="key" id="z">Z</button>
             <button class="key" id="x">X</button>
             <button class="key" id="c">C</button>
@@ -126,12 +127,14 @@
             <button class="key" id="b">B</button>
             <button class="key" id="n">N</button>
             <button class="key" id="m">M</button>
-            <button class="key keywarn" id="resign">End</button>
+            <button class="key kwarn klarge" id="resign">End</button>
         </div>
-        <p class="lockbl nudget" id="timer">Time: 00:00</p>
-        <p class="lockbl nudget2" id="acc">Accuracy: 0%</p>
-        <p class="lockbl" id="possibilities">Possibilities: ???</p>
     </div>
-    <p class="locktm" id="headsup"></p>
+    <div class="widgetcontainer">
+        <p class="widget" id="widgetTimer">Time: 00:00</p>
+        <p class="widget" id="widgetAccuracy">Accuracy: 0%</p>
+        <p class="widget" id="widgetPossibilities">Possibilities: ???</p>
+    </div>
+    <p id="headsup"></p>
 </body>
 </html>

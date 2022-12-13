@@ -67,7 +67,6 @@ class Word {
 const baseBoxFontSize = 56;
 const minorBoxFontSize = 16;
 const alphabet = "abcdefghijklmnopqrstuvwxyz";
-const fittedkeys = [...alphabet.split(""), "help","settings"];
 const gred = ["GREEN","RED"];
 
 let dragging = true;
@@ -184,13 +183,13 @@ function mouseDown(event) {
 }
 
 function touchDown(event) {
-    if (event.touches.length === 2) {
-        touchPinch = true;
-        prevPinch = pinchDist(event);
-        //Code
-    } else {
-        const touch = getTouches(event)[0];
-        if (touch.clientY < res[1]*0.7) {
+    const touch = getTouches(event)[0];
+    if (touch.clientY < res[1]*0.7) {
+        if (event.touches.length === 2) {
+            touchPinch = true;
+            prevPinch = pinchDist(event);
+            //Code
+        } else {
             clientX = touch.clientX
             clientY = touch.clientY
             oldCanvasPosition = [...canvasPosition];
@@ -270,35 +269,35 @@ document.addEventListener("mousemove", mouseMove);
 document.addEventListener("touchmove", touchMove);
 
 function touchMove(event) {
-    if (touchPinch) {
-        let nPinch = pinchDist(event);
-        let pos = [
-            (event.touches[0].pageX+event.touches[1].pageX)/2,
-            (event.touches[0].pageY+event.touches[1].pageY)/2
-        ];
-        //zoom!!!
-        let zoomStrength = 1.05;
-        let zoomMax = 2;
-        let zoomMin = 0.25;
-        if (nPinch > prevPinch){
-            if (canvasScale < zoomMax) {
-                canvasScale *= zoomStrength;
-                canvasPosition[0] = pos[0]-((pos[0]-canvasPosition[0])*zoomStrength)
-                canvasPosition[1] = pos[1]-((pos[1]-canvasPosition[1])*zoomStrength)
+    const touch = getTouches(event)[0];
+    if (touch.clientY < res[1]*0.7) {
+        if (touchPinch) {
+            let nPinch = pinchDist(event);
+            let pos = [
+                (event.touches[0].pageX+event.touches[1].pageX)/2,
+                (event.touches[0].pageY+event.touches[1].pageY)/2
+            ];
+            //zoom!!!
+            let zoomStrength = 1.05;
+            let zoomMax = 2;
+            let zoomMin = 0.25;
+            if (nPinch > prevPinch){
+                if (canvasScale < zoomMax) {
+                    canvasScale *= zoomStrength;
+                    canvasPosition[0] = pos[0]-((pos[0]-canvasPosition[0])*zoomStrength)
+                    canvasPosition[1] = pos[1]-((pos[1]-canvasPosition[1])*zoomStrength)
+                }
+            } else if (nPinch < prevPinch) {
+                if (canvasScale > zoomMin){
+                    canvasScale /= zoomStrength;
+                    canvasPosition[0] = pos[0]-((pos[0]-canvasPosition[0])/zoomStrength)
+                    canvasPosition[1] = pos[1]-((pos[1]-canvasPosition[1])/zoomStrength)
+                }
             }
-        } else if (nPinch < prevPinch) {
-            if (canvasScale > zoomMin){
-                canvasScale /= zoomStrength;
-                canvasPosition[0] = pos[0]-((pos[0]-canvasPosition[0])/zoomStrength)
-                canvasPosition[1] = pos[1]-((pos[1]-canvasPosition[1])/zoomStrength)
-            }
-        }
-        prevPinch = nPinch;
-        drawToCanvas();
-        //code
-    } if (musDown) {
-        const touch = getTouches(event)[0];
-        if (touch.clientY < res[1]*0.7) {
+            prevPinch = nPinch;
+            drawToCanvas();
+            //code
+        } if (musDown) {
             nMove(touch);
         }
     }
@@ -786,7 +785,7 @@ function updateKB() {
     } else {
         p = countPossibilities();
     }
-    document.getElementById("possibilities").textContent = `Possibilities: ${p}`;
+    document.getElementById("widgetPossibilities").textContent = `Possibilities: ${p}`;
 }
 
 function fixCanvasSize() {
@@ -800,7 +799,7 @@ function fixCanvasSize() {
   
     canvas = document.getElementById('canvas');
     canvas.width = document.body.clientWidth;
-    canvas.height = canvasHeight*0.7;
+    canvas.height = canvasHeight-Math.min(canvasHeight*0.3, 200);
     res = [document.body.clientWidth,canvasHeight];
 }
 
@@ -812,11 +811,6 @@ function fixElements() {
     let maxHeight = res[1]*0.3/3.5;
     let maxWidth = res[0]/22;
     let desired = Math.min(maxHeight,maxWidth);
-    for (const char of fittedkeys) {
-        document.getElementById(char).style.width = `${desired}px`;
-        document.getElementById(char).style.height = `${desired}px`;
-        document.getElementById(char).style.fontSize = `${desired*25/40}px`;
-    }
     for (const char of alphabet) {
         document.getElementById(char).addEventListener("click", () => {
             document.getElementById(char).style.borderColor = "#000000";
@@ -830,13 +824,6 @@ function fixElements() {
         });
         document.getElementById(char).addEventListener("mousedown", () => {
             document.getElementById(char).style.borderColor = "#0000ff";
-        });
-    }
-    for (const k of ["enter","resign","enteri","back","settings","help"]) {
-        document.getElementById(k).style.height = `${desired}px`;
-        document.getElementById(k).style.fontSize = `${desired*25/40}px`;
-        document.getElementById(k).addEventListener("mousedown", () => {
-            document.getElementById(k).style.borderColor = "#0000ff";
         });
     }
     document.getElementById("settings").addEventListener("click", () => {
@@ -1012,9 +999,9 @@ function tick() {
             awaitingENload = false;
         }
     }
-    document.getElementById("timer").textContent = `Time: ${Math.floor(timer/(60*tps)).toString().padStart(2,"0")}:${(Math.floor((timer/tps))%60).toString().padStart(2,"0")}`;
+    document.getElementById("widgetTimer").textContent = `Time: ${Math.floor(timer/(60*tps)).toString().padStart(2,"0")}:${(Math.floor((timer/tps))%60).toString().padStart(2,"0")}`;
     if (complete) {
-        document.getElementById("timer").style.color = "rgb(0,0,255)";
+        document.getElementById("widgetTimer").style.color = "rgb(0,0,255)";
     }
     let accuracy;
     if (guesses == 0) {
@@ -1022,7 +1009,7 @@ function tick() {
     } else {
         accuracy = 100*solvedWords.length/guesses;
     }
-    document.getElementById("acc").textContent = `Accuracy: ${Math.round(accuracy)}%`;
+    document.getElementById("widgetAccuracy").textContent = `Accuracy: ${Math.round(accuracy)}%`;
     if (heldKeys.includes("ArrowDown")) {
         canvasPosition[1] += 10;
         drawToCanvas();
