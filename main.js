@@ -311,6 +311,7 @@ function mouseMove(event) {
 }
 
 function nMove(event) {
+    hud("nMove");
     if (Math.sqrt(Math.pow(event.clientX-clientX,2)+Math.pow(event.clientY-clientY,2)) > 5) {
         canvasPosition[0] = oldCanvasPosition[0]+(event.clientX-clientX);
         canvasPosition[1] = oldCanvasPosition[1]+(event.clientY-clientY);

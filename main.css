@@ -259,3 +259,28 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+/* Zoom buttons */
+.zoomButton {
+    position: absolute;
+    border-radius: 4px;
+    right: 5px;
+    width: 29px;
+    height: 29px;
+    border: 0px;
+    margin: 0px;
+    outline: 0px;
+    padding: 0px;
+    background-color: rgba(100, 100, 100);
+    color: white;
+    font-size: calc(8vh*20/45);
+    cursor: pointer;
+}
+
+#zoomIn {
+    top: 5px;
+}
+
+#zoomOut {
+    top: 37px;
+}
