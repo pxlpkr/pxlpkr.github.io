@@ -2,11 +2,22 @@
     font-family: "Helvetica", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    overflow: hidden;
+    touch-action: none;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Chrome, Edge, Opera and Firefox */
 }
 
 :root {
     --keyboardDivHeight: min(30vh, 200px);
     --keyboardRowHeight: calc(var(--keyboardDivHeight)/4);
+    --keyboardKeySize: min(var(--keyboardRowHeight), calc(100vh/14));
     --keyboardRowPaddingTop: calc(var(--keyboardRowHeight)/4);
     --widgetSize: calc(8vh*20/75);
 }
@@ -43,8 +54,8 @@ canvas {
     border-style: solid;
     border-width: 2px;
     border-radius: 8px;
-    width: var(--keyboardRowHeight);
-    height: var(--keyboardRowHeight);
+    width: var(--keyboardKeySize);
+    height: var(--keyboardKeySize);
     background: #ffffff;
     /* border-radius: 3px; */
     font-size: calc(8vh*20/45);
@@ -68,7 +79,7 @@ canvas {
 }
 
 .klarge {
-    width: calc(var(--keyboardRowHeight)*2);
+    width: calc(var(--keyboardKeySize)*2);
 }
 
 .kwarn {
