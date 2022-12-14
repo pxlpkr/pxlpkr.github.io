@@ -257,7 +257,6 @@ function mouseUp(event) {
 
 function touchUp(event) {
     if (touch.clientY < cvres[1]) {
-        hud(touch.clientY+"< "+cvres[1])
         if (touchPinch) {
             touchPinch = false;
         } else {
@@ -299,6 +298,7 @@ function touchMove(event) {
             drawToCanvas();
             //code
         } if (musDown) {
+            hud(touch.clientY+" < "+cvres[1])
             nMove(touch);
         }
     }
@@ -311,7 +311,6 @@ function mouseMove(event) {
 }
 
 function nMove(event) {
-    hud("nMove");
     if (Math.sqrt(Math.pow(event.clientX-clientX,2)+Math.pow(event.clientY-clientY,2)) > 5) {
         canvasPosition[0] = oldCanvasPosition[0]+(event.clientX-clientX);
         canvasPosition[1] = oldCanvasPosition[1]+(event.clientY-clientY);
