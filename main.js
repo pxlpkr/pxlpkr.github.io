@@ -298,7 +298,6 @@ function touchMove(event) {
             drawToCanvas();
             //code
         } if (musDown) {
-            hud(touch.clientY+" < "+cvres[1])
             nMove(touch);
         }
     }
