@@ -79,7 +79,11 @@ canvas {
 }
 
 .klarge {
-    width: calc(var(--keyboardKeySize)*2);
+    width: calc(var(--keyboardKeySize)*2.5);
+}
+
+.kmed {
+    width: calc(var(--keyboardKeySize)*1.8);
 }
 
 .kwarn {
@@ -180,6 +184,10 @@ canvas {
 .miniDifficultySetting:hover {
     cursor: pointer;
     background-color: #ddeeff;
+}
+
+.puristSetting {
+    display: none;
 }
 
 #settingsMenu {

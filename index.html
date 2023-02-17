@@ -21,19 +21,19 @@
         <p class="ttext ttitle">Settings</p>
         <p class="ttext tsubtitle">Challenges:</p>
         <label class="switch" style="float:left">
-            <input type="checkbox" id="absurdModeSetting">
+            <input type="checkbox" autocomplete="off" id="absurdModeSetting">
             <span class="slider round"></span>
         </label>
         <p class="ttext tsubtitle" style="float:left; font-size:18px; margin-top:6px;">Absurd Mode</p>
         <div style="clear:left"></div><br>
         <label class="switch" style="float:left">
-            <input type="checkbox" id="snowballModeSetting">
+            <input type="checkbox" autocomplete="off" id="snowballModeSetting">
             <span class="slider round"></span>
         </label>
         <p class="ttext tsubtitle" style="float:left; font-size:18px; margin-top:6px;">Snowball Mode</p>
         <div style="clear:left"></div><br>
         <label class="switch" style="float:left">
-            <input type="checkbox" id="ultimateModeSetting">
+            <input type="checkbox" autocomplete="off" id="ultimateModeSetting">
             <span class="slider round"></span>
         </label>
         <p class="ttext tsubtitle" style="float:left; font-size:18px; margin-top:6px;">Ultimate Mode</p>
@@ -43,21 +43,27 @@
         <button class="miniDifficultySetting" id="25k">25k</button>
         <button class="miniDifficultySetting" id="450k">450k</button>
         <div style="clear:left"></div><br>
+        <label class="switch" style="float:left; display:none" id="puristSwitch">
+            <input type="checkbox" autocomplete="off" id="puristModeSetting">
+            <span class="slider round"></span>
+        </label>
+        <p id="puristLabel" class="ttext tsubtitle" style="float:left; font-size:18px; margin-top:6px; display:none">Purist Mode</p>
+        <div style="clear:left"></div><br>
         <p class="ttext tsubtitle">Cheats:</p>
         <label class="switch" style="float:left">
-            <input type="checkbox" id="dontForceYellowLettersSetting">
+            <input type="checkbox" autocomplete="off" id="dontForceYellowLettersSetting">
             <span class="slider round"></span>
         </label>
         <p class="ttext tsubtitle" style="float:left; font-size:18px; margin-top:6px;">Don't Force Yellow Letters</p>
         <div style="clear:left"></div><br>
         <label class="switch" style="float:left">
-            <input type="checkbox" id="allowBannedLettersSetting">
+            <input type="checkbox" autocomplete="off" id="allowBannedLettersSetting">
             <span class="slider round"></span>
         </label>
         <p class="ttext tsubtitle" style="float:left; font-size:18px; margin-top:6px;">Allow Banned Letters</p>
         <div style="clear:left"></div><br>
         <label class="switch" style="float:left">
-            <input type="checkbox" id="allowWordRepeatSetting">
+            <input type="checkbox" autocomplete="off" id="allowWordRepeatSetting">
             <span class="slider round"></span>
         </label>
         <p class="ttext tsubtitle" style="float:left; font-size:18px; margin-top:6px;">Allow Word Repeat</p>
@@ -122,6 +128,7 @@
             <button class="key kinv" id="helpi">?</button>
         </div>
         <div class="keyrow">
+            <button class="key kinv" id="resigni">End</button>
             <button class="key" id="z">Z</button>
             <button class="key" id="x">X</button>
             <button class="key" id="c">C</button>
@@ -129,7 +136,7 @@
             <button class="key" id="b">B</button>
             <button class="key" id="n">N</button>
             <button class="key" id="m">M</button>
-            <button class="key kwarn klarge" id="resign">End</button>
+            <button class="key kwarn kmed" id="resign">End</button>
         </div>
     </div>
     <div class="widgetcontainer">

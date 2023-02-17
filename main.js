@@ -7,6 +7,7 @@ absurdMode = false;
 snowballMode = false;
 ultimateMode = false;
 ultimateTier = 1;
+puristMode = false;
 awaitingENload = false;
 
 autofillMode = false;
@@ -731,7 +732,11 @@ function drawToCanvas() {
             textCount++;
         } if (ultimateMode) {
             context.font = Math.round(16)+"px Helvetica";
-            context.fillText(`Ultimate Mode: ${ultimateTier}k`, 4, -2+20*textCount);
+            if (puristMode) {
+                context.fillText(`Pure Ultimate Mode: ${ultimateTier}k`, 4, -2+20*textCount);
+            } else {
+                context.fillText(`Ultimate Mode: ${ultimateTier}k`, 4, -2+20*textCount);
+            }
             textCount++;
         } if (snowballMode) {
             context.font = Math.round(16)+"px Helvetica";
@@ -884,7 +889,15 @@ function fixElements() {
             enterKeyPressEvent();
             document.getElementById("snowballModeSetting").disabled = true;
             document.getElementById("ultimateModeSetting").disabled = true;
+            document.getElementById("puristModeSetting").disabled = true;
             drawToCanvas();
+        }
+    });
+    document.getElementById("puristModeSetting").addEventListener("click", () => {
+        if (timer == 0) {
+            puristMode = true;
+            document.getElementById("puristModeSetting").disabled = true;
+            awaitingENload = true;
         }
     });
     document.getElementById("ultimateModeSetting").addEventListener("click", () => {
@@ -898,6 +911,8 @@ function fixElements() {
             updateDifficultyMenus();
             document.getElementById("ultimateModeSetting").disabled = true;
             document.getElementById("absurdModeSetting").disabled = true;
+            document.getElementById("puristSwitch").style.display = "inline";
+            document.getElementById("puristLabel").style.display = "inline";
             drawToCanvas();
         }
     });
@@ -942,6 +957,14 @@ function difficultyMenuClicked(num) {
     if (num == 10) {validAnswers = en_10k}
     if (num == 25) {validAnswers = en_25k}
     if (num == 450) {validAnswers = en_450k}
+    if (puristMode) {
+        for (i = 0; i < validAnswers.length; i++) {
+            if (validAnswers[i].length < 5) {
+                validAnswers.splice(i, 1);
+                i--;
+            }
+        }
+    }
     words["h0,0"] = new Word(getWord());
     usedWords = [];
     codify(words["h0,0"].word)
@@ -987,8 +1010,21 @@ function tick() {
         timer++;
     }
     if (awaitingENload) {
-        if (typeof en_1k != 'undefined') {
-            validAnswers = en_1k;
+        if (ultimateTier == 1) {target = en_1k}
+        else if (ultimateTier == 5) {target = en_5k}
+        else if (ultimateTier == 10) {target = en_10k}
+        else if (ultimateTier == 25) {target = en_25k}
+        else if (ultimateTier == 450) {target = en_450k}
+        if (typeof target != 'undefined') {
+            validAnswers = target;
+            if (puristMode) {
+                for (i = 0; i < validAnswers.length; i++) {
+                    if (validAnswers[i].length < 5) {
+                        validAnswers.splice(i, 1);
+                        i--;
+                    }
+                }
+            }
             validWords = en_450k;
             words["h0,0"] = new Word(getWord());
             codify(words["h0,0"].word)
@@ -998,6 +1034,7 @@ function tick() {
                 letterMap.push(`${i}:0`);
             }
             awaitingENload = false;
+            drawToCanvas();
         }
     }
     document.getElementById("widgetTimer").textContent = `Time: ${Math.floor(timer/(60*tps)).toString().padStart(2,"0")}:${(Math.floor((timer/tps))%60).toString().padStart(2,"0")}`;
