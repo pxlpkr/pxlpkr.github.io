@@ -1,294 +1,80 @@
-* {
-    font-family: "Helvetica", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-
-    overflow: hidden;
-    touch-action: none;
-
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Chrome, Edge, Opera and Firefox */
+body {
+    background: linear-gradient(-45deg,#0d6686,#12888d,#0d3386);
+	background-size: 400% 400%;
+	animation: gradient 30s ease infinite;
+	height: 100vh;
 }
 
-:root {
-    --keyboardDivHeight: min(30vh, 200px);
-    --keyboardRowHeight: calc(var(--keyboardDivHeight)/4);
-    --keyboardKeySize: min(var(--keyboardRowHeight), calc(100vw/17));
-    --keyboardRowPaddingTop: calc(var(--keyboardRowHeight)/4);
-    --widgetSize: calc(8vh*20/75);
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
-canvas {
-    width: 100vw;
-    height: calc(100vh-var(--keyboardDivHeight));
-    position: absolute;
-    right: 0; top: 0;
-}
-
-/* Keyboard stuff */
-.keyboard {
-    z-index: 2;
-    position: absolute;
-    left: 0px;
-    bottom: 0px;
-    width: 100vw;
-    height: var(--keyboardDivHeight);
-    background: #eeeeee;
+p {
+    font-size: 24px;
     text-align: center;
-    padding: 0px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #ffffff;
 }
 
-.keyrow {
-    height: var(--keyboardRowHeight);
-    width: 100vw;
-    padding-top: var(--keyboardRowPaddingTop);
-}
-
-.key {
-    border: #000000;
-    border-style: solid;
-    border-width: 2px;
-    border-radius: 8px;
-    width: var(--keyboardKeySize);
-    height: var(--keyboardKeySize);
-    background: #ffffff;
-    /* border-radius: 3px; */
-    font-size: calc(8vh*20/45);
-    line-height: calc(8vh*20/45) !important;
-}
-
-.key:hover {
-    /* color: #2222ff;
-    border-color: #2222ff; */
-    cursor: pointer;
-}
-
-.kinv {
-    background: #eeeeee;
-    border: #eeeeee;
-    color: #eeeeee;
-}
-
-.kinv:hover {
-    border-style: none;
-    cursor: default;
-}
-
-.klarge {
-    width: calc(var(--keyboardKeySize)*2.5);
-}
-
-.kmed {
-    width: calc(var(--keyboardKeySize)*1.8);
-}
-
-.kwarn {
-    background: #ffdddd;
-}
-
-/* Widget stuff */
-.widgetcontainer {
+#center {
+    display: table;
     position: absolute;
-    z-index: 3;
-    left: 5px;
-    bottom: 0px;
-}
-
-.widget {
-    font-size: var(--widgetSize);
-    margin: calc(var(--widgetSize)/2);
-    z-index: 3;
-    bottom: 0px;
-}
-
-#headsup {
-    position: absolute;
-    left: 50%;
-    width: 100vh;
-    text-align: center;
-    margin-left: -50vh;
     top: 0px;
-    font-size: 26px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
 }
 
-.ttext {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 30px;
+#middle {
+    display: table-cell;
+    vertical-align: middle;
 }
 
-.tsubtitle {
-    margin-left: 15px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.ttitle {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-left: 0px;
+.inner {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
     text-align: center;
-    font-size: calc(8vh*20/45);
 }
 
-.tli {
-    display: list-item;
-    list-style-position: inside;
-    list-style-type: disc;
-}
-
-.tlist {
-    margin-top: 0px;
-}
-
-.xButton {
-    position: absolute;
-    right: 5px;
-    top: 5px;
-}
-
-.xButton:hover {
-    cursor: pointer;
-}
-
-.popup {
-    display: none;
-    z-index: 4;
-    position: absolute;
-    top: 50%; left: 50%;
-    margin: -40vh 0 0 -20vw;
-    height: 80vh;
-    width: 40vw;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 23px 0 rgba(0, 0, 0, 0.2);
-}
-
-.miniDifficultySetting {
-    display: none;
-    position: relative;
-    margin-left: 5px;
-    width: 48px;
-    height: 34px;
-    font-size: 16px;
-    border-width: 2px;
-    border-style: solid;
-    background-color: #ffffff;
-    border-color: #000000;
-}
-
-.miniDifficultySetting:hover {
-    cursor: pointer;
-    background-color: #ddeeff;
-}
-
-.puristSetting {
-    display: none;
-}
-
-#settingsMenu {
-    padding-left: 40px;
-}
-
-#tutorialoverlay {
-    display: none;
-    z-index: 3;
-    position: absolute;
-    top: 0; left: 0;
-    height: 100vh;
-    width: 100vw;
-    background-color: #ffffff88;
-}
-
-/* Slider stuff */
-.switch {
-    position: relative;
+.gamelabel {
+    width: 20%;
     display: inline-block;
-    width: 60px;
-    height: 34px;
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+.gameicon {
+    width: 20%;
+    display: inline-block;
+    margin-left: 5%;
+    margin-right: 5%;
+    
+    border-width: 4px;
+    border-style: solid;
+    border-color: #ffffff;
 }
 
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
+.gameicon:hover {
+    animation: border_pulse 1s linear infinite;
 }
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-input:checked + .slider {
-    background-color: #0c6fc1;
-}
-
-input:not(:checked):disabled + .slider {
-    background-color: #8b8b8b;
-}
-
-input:focus + .slider {
-    box-shadow: 0 0 1px #0c6fc1;
-}
-
-input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-}
-
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
-}
-
-/* Zoom buttons */
-.zoomButton {
-    position: absolute;
-    border-radius: 4px;
-    right: 5px;
-    width: 29px;
-    height: 29px;
-    border: 0px;
-    margin: 0px;
-    outline: 0px;
-    padding: 0px;
-    background-color: rgba(100, 100, 100);
-    color: white;
-    font-size: calc(8vh*20/45);
-    cursor: pointer;
-}
-
-#zoomIn {
-    top: 5px;
-}
-
-#zoomOut {
-    top: 37px;
+@keyframes border_pulse {
+	0% {
+		border-color: #444444;
+	}
+    50% {
+		border-color: #ffffff;
+	}
+	100% {
+		border-color: #444444;
+	}
 }
