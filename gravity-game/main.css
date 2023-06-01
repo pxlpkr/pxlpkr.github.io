@@ -1,0 +1,106 @@
+* {
+    font-family: "Helvetica", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    overflow: hidden;
+    touch-action: none;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Chrome, Edge, Opera and Firefox */
+}
+
+#background {
+    background-image: url("https://wallpaperaccess.com/full/1745055.jpg");
+    background-size: 50%;
+    position: absolute;
+    left: 0px; top: 0px;
+    width: 100%; height: 100%;
+    opacity: 0.2;
+}
+
+body {
+    background-color: #000000;
+}
+
+#sidebar {
+    width: 20%;
+    height: 100%;
+    position: absolute;
+    right: 0; top: 0;
+
+    text-align: center;
+}
+
+#sidebar-bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    right: 0; top: 0;
+    opacity: 0.15;
+    z-index: -99;
+    background: #ffffff;
+}
+
+#info_box_container {
+    width: 100%;
+    height: 40%;
+    position: absolute;
+    right: 0; top: 60%;
+}
+
+.info_label {
+    font-size: 1vw;
+    z-index: 2;
+    color: #ffffff;
+}
+
+.info_box {
+    margin: 0px;
+    z-index: 2;
+    width: 3vw; height: 1vw;
+    background-color: #00000000;
+    border-style: solid;
+    border-color: #ffffff;
+    border-width: 1px;
+    color: #ffffff;
+    font-size: 1vw;
+}
+
+.info_box:hover {
+    animation: 1s color_pulse infinite ease;
+}
+
+@keyframes color_pulse {
+    0% {
+        background-color: #0000ffbb;
+    } 50% {
+        background-color: #0000ff66;
+    } 100% {
+        background-color: #0000ffbb;
+    }
+}
+
+.info_button:hover {
+    animation: 1s color_pulse infinite ease;
+}
+
+.info_button {
+    margin: 0px;
+    z-index: 2;
+    width: 8vw; height: 2vw;
+    background-color: #00000000;
+    border-style: solid;
+    border-color: #ffffff;
+    border-width: 1px;
+    color: #ffffff;
+    font-size: 1vw;
+}
+
+.info_box_big {
+    width: 6vw;
+}

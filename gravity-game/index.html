@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Add CSS -->
+    <link rel='stylesheet' type='text/css' href='main.css' media='screen'/>
+
+    <!-- Tab Information -->
+    <title>Gravity Game</title>
+    <link href="https://pxlpkr.github.io/icons/gravity-game/favicon.ico" type="image/x-icon" rel="icon">
+    <link href="https://pxlpkr.github.io/icons/gravity-game/favicon.ico" type="image/x-icon" rel="shortcut icon">
+
+    <!-- Other stuff -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+</head>
+<body>
+    <script src='main.js'></script>
+    <div id="background"></div>
+    <div id="sidebar">
+        <div id="sidebar-bg"></div>
+        <div id="info_box_container">
+            <label class="info_label">Position ⟨</label>
+            <input class="info_box" type="text" id="info_position_x">
+            <label class="info_label">units, </label>
+            <input class="info_box" type="text" id="info_position_y">
+            <label class="info_label">units⟩</label>
+            <br><br>
+            <label class="info_label">Velocity ⟨</label>
+            <input class="info_box" type="text" id="info_velocity_x">
+            <label class="info_label">units/s, </label>
+            <input class="info_box" type="text" id="info_velocity_y">
+            <label class="info_label">units/s⟩</label>
+            <br><br>
+            <label class="info_label">Radius</label>
+            <input class="info_box info_box_big" type="text" id="info_radius">
+            <label class="info_label">units</label>
+            <br><br>
+            <label class="info_label">Density</label>
+            <input class="info_box info_box_big" type="text" id="info_density">
+            <label class="info_label">kg/units³</label>
+            <br><br>
+            <button class="info_button" id="delete_body">Delete</button>
+        </div>
+    </div>
+</body>
+</html>
