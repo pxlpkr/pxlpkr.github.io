@@ -72,10 +72,10 @@ body {
 }
 
 .info_box:hover {
-    animation: 1s color_pulse infinite ease;
+    animation: 1s blue_pulse infinite ease;
 }
 
-@keyframes color_pulse {
+@keyframes blue_pulse {
     0% {
         background-color: #0000ffbb;
     } 50% {
@@ -85,8 +85,22 @@ body {
     }
 }
 
+.pulsing_border {
+    animation: 2s green_border_pulse infinite linear;
+}
+
+@keyframes green_border_pulse {
+    0% {
+        border-color: #ffffff;
+    } 50% {
+        border-color: #00cc00;
+    } 100% {
+        border-color: #ffffff;
+    }
+}
+
 .info_button:hover {
-    animation: 1s color_pulse infinite ease;
+    animation: 1s blue_pulse infinite ease;
 }
 
 .info_button {
