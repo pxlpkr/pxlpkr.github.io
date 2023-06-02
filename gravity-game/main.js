@@ -96,7 +96,7 @@ window.game = class {
     static ship_dead = false;
 
     static level = 1;
-    static max_level = 20;
+    static max_level = 18;
     static level_name = "";
 
     static ship = class {
@@ -148,7 +148,7 @@ let ship_texture = new Image();
 ship_texture.src = "https://static.vecteezy.com/system/resources/previews/008/507/286/original/lens-flare-light-special-effect-free-png.png";
 
 let end_texture = new Image();
-end_texture.src = "https://i.pinimg.com/originals/e4/ae/0a/e4ae0a5cadaf0bc15baa6b983fcd2c96.png";
+end_texture.src = "https://pxlpkr.github.io/gravity-game/end_texture.png";
 
 let satellite_texture = new Image();
 satellite_texture.src = "https://cdn.britannica.com/57/4957-050-D5B48D7B/spacecraft-depiction-artist-body-Voyager-receivers-dish.jpg";
@@ -164,6 +164,9 @@ explosion_texture.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/
 
 let win_splash_texture = new Image();
 win_splash_texture.src = "https://pxlpkr.github.io/gravity-game/win_splash.png";
+
+let tutorial_splash_texture = new Image();
+tutorial_splash_texture.src = "https://pxlpkr.github.io/gravity-game/tutorial.png";
 
 //#endregion
 
@@ -301,55 +304,19 @@ function loadLevel(level_id) {
             ];
         break;
         case 8:
-            window.game.level_name = "Sine Wave";
+            window.game.level_name = "Barrier to Entry";
 
             window.game.ship.pos = new Vector2D(50, 400);
-            window.game.ship.old_pos = new Vector2D(47, 400);
+            window.game.ship.old_pos = new Vector2D(49, 400);
 
             window.game.goal.pos = new Vector2D(750, 400);
 
             window.game.obstacles = [
                 [
-                    new Vector2D(0, 0),
-                    new Vector2D(800, 0),
-                    new Vector2D(800, 200),
-                    new Vector2D(0, 200)
-                ],
-                [
-                    new Vector2D(0, 800),
-                    new Vector2D(800, 800),
-                    new Vector2D(800, 600),
-                    new Vector2D(0, 600)
-                ],
-                [
-                    new Vector2D(200, 200),
-                    new Vector2D(210, 200),
-                    new Vector2D(210, 400),
-                    new Vector2D(200, 400)
-                ],
-                [
-                    new Vector2D(300, 600),
-                    new Vector2D(310, 600),
-                    new Vector2D(310, 400),
-                    new Vector2D(300, 400)
-                ],
-                [
-                    new Vector2D(400, 200),
-                    new Vector2D(410, 200),
-                    new Vector2D(410, 400),
-                    new Vector2D(400, 400)
-                ],
-                [
-                    new Vector2D(500, 600),
-                    new Vector2D(510, 600),
-                    new Vector2D(510, 400),
-                    new Vector2D(500, 400)
-                ],
-                [
-                    new Vector2D(600, 200),
-                    new Vector2D(610, 200),
-                    new Vector2D(610, 400),
-                    new Vector2D(600, 400)
+                    new Vector2D(125, 350),
+                    new Vector2D(125, 450),
+                    new Vector2D(700, 450),
+                    new Vector2D(700, 350)
                 ],
             ];
         break;
@@ -370,7 +337,7 @@ function loadLevel(level_id) {
             ];
         break;
         case 10:
-            window.game.level_name = "Asteroid Belt";
+            window.game.level_name = "Asteroid Field";
 
             window.game.ship.pos = new Vector2D(50, 50);
             window.game.ship.old_pos = new Vector2D(48, 48);
@@ -539,7 +506,7 @@ function loadLevel(level_id) {
             }
         break;
         case 11:
-            window.game.level_name = "This is the Part Where You Need to Abuse Density";
+            window.game.level_name = "This is the Part Where You Need to Start Abusing Density";
             
             window.game.ship.pos = new Vector2D(50, 50);
             window.game.ship.old_pos = new Vector2D(45, 50);
@@ -555,7 +522,7 @@ function loadLevel(level_id) {
             ];
         break;
         case 12:
-            window.game.level_name = "Hold Shift While Dragging for Fine Tuning";
+            window.game.level_name = "Thread the Needle";
             
             window.game.ship.pos = new Vector2D(100, 700);
             window.game.ship.old_pos = new Vector2D(100, 705);
@@ -600,8 +567,61 @@ function loadLevel(level_id) {
                 ]
             ];
         break;
+        case 14:
+            window.game.level_name = "Sine Wave";
+
+            window.game.ship.pos = new Vector2D(50, 400);
+            window.game.ship.old_pos = new Vector2D(47, 400);
+
+            window.game.goal.pos = new Vector2D(750, 400);
+
+            window.game.obstacles = [
+                [
+                    new Vector2D(0, 0),
+                    new Vector2D(800, 0),
+                    new Vector2D(800, 200),
+                    new Vector2D(0, 200)
+                ],
+                [
+                    new Vector2D(0, 800),
+                    new Vector2D(800, 800),
+                    new Vector2D(800, 600),
+                    new Vector2D(0, 600)
+                ],
+                [
+                    new Vector2D(200, 200),
+                    new Vector2D(210, 200),
+                    new Vector2D(210, 400),
+                    new Vector2D(200, 400)
+                ],
+                [
+                    new Vector2D(300, 600),
+                    new Vector2D(310, 600),
+                    new Vector2D(310, 400),
+                    new Vector2D(300, 400)
+                ],
+                [
+                    new Vector2D(400, 200),
+                    new Vector2D(410, 200),
+                    new Vector2D(410, 400),
+                    new Vector2D(400, 400)
+                ],
+                [
+                    new Vector2D(500, 600),
+                    new Vector2D(510, 600),
+                    new Vector2D(510, 400),
+                    new Vector2D(500, 400)
+                ],
+                [
+                    new Vector2D(600, 200),
+                    new Vector2D(610, 200),
+                    new Vector2D(610, 400),
+                    new Vector2D(600, 400)
+                ],
+            ];
+        break;
         case 15:
-            window.game.level_name = "315 Degrees, Twice";
+            window.game.level_name = "135°x2";
 
             window.game.ship.pos = new Vector2D(50, 50);
             window.game.ship.old_pos = new Vector2D(43, 50);
@@ -621,8 +641,108 @@ function loadLevel(level_id) {
                 ],
             ];
         break;
-        case 20:
-            window.game.level_name = "Final Level";
+        case 16:
+            window.game.level_name = "Corridor II";
+
+            window.game.ship.pos = new Vector2D(600, 600);
+            window.game.ship.old_pos = new Vector2D(600, 600);
+
+            window.game.goal.pos = new Vector2D(50, 750);
+
+            window.game.obstacles = [
+                [
+                    new Vector2D(0, 700),
+                    new Vector2D(0, 300),
+                    new Vector2D(475, 300)
+                ],
+                [
+                    new Vector2D(100, 800),
+                    new Vector2D(500, 800),
+                    new Vector2D(500, 325)
+                ],
+            ];
+        break;
+        case 17:
+            window.game.level_name = "Ludicrous Speed";
+
+            window.game.ship.pos = new Vector2D(25, 25);
+            window.game.ship.old_pos = new Vector2D(-20, 20);
+
+            window.game.goal.pos = new Vector2D(400, 780);
+
+            window.game.obstacles = [
+                [
+                    new Vector2D(0, 10),
+                    new Vector2D(400, 10),
+                    new Vector2D(400, 50)
+                ],
+                [
+                    new Vector2D(0, 30),
+                    new Vector2D(0, 75),
+                    new Vector2D(400, 75)
+                ],
+                [
+                    new Vector2D(0, 150),
+                    new Vector2D(580, 150),
+                    new Vector2D(0, 500)
+                ],
+                [
+                    new Vector2D(800, 150),
+                    new Vector2D(800, 500),
+                    new Vector2D(100, 500)
+                ],
+                [
+                    new Vector2D(0, 400),
+                    new Vector2D(230, 400),
+                    new Vector2D(230, 350),
+                    new Vector2D(0, 350)
+                ],
+                [
+                    new Vector2D(800, 225),
+                    new Vector2D(555, 225),
+                    new Vector2D(555, 275),
+                    new Vector2D(800, 275)
+                ],
+                [
+                    new Vector2D(10, 790),
+                    new Vector2D(350, 790),
+                    new Vector2D(350, 765),
+                    new Vector2D(10, 765)
+                ],
+                [
+                    new Vector2D(790, 790),
+                    new Vector2D(450, 790),
+                    new Vector2D(450, 765),
+                    new Vector2D(790, 765)
+                ],
+                [
+                    new Vector2D(60, 755),
+                    new Vector2D(300, 755),
+                    new Vector2D(300, 730),
+                    new Vector2D(60, 730)
+                ],
+                [
+                    new Vector2D(740, 755),
+                    new Vector2D(500, 755),
+                    new Vector2D(500, 730),
+                    new Vector2D(740, 730)
+                ],
+                [
+                    new Vector2D(110, 720),
+                    new Vector2D(250, 720),
+                    new Vector2D(250, 695),
+                    new Vector2D(110, 695)
+                ],
+                [
+                    new Vector2D(690, 720),
+                    new Vector2D(550, 720),
+                    new Vector2D(550, 695),
+                    new Vector2D(690, 695)
+                ],
+            ];
+        break;
+        case 18:
+            window.game.level_name = "I'm Pretty Sure This One is Impossible";
 
             window.game.ship.pos = new Vector2D(380, 15);
             window.game.ship.old_pos = new Vector2D(380, 13);
@@ -1034,6 +1154,9 @@ function loadDynamicElements() {
             if (window.game.ship_dead) {
                 resetLevel();
             }
+            if (editsAllowed) {
+                $(id_).select();
+            }
         });
     }
 
@@ -1311,6 +1434,11 @@ function render() {
     ctx.fillStyle = "#000000";
     ctx.fillRect(0, 0, $("canvas").width, $("canvas").height);
 
+    // Draw tutorial
+    if (window.game.level == 1) {
+        drawImageAround(tutorial_splash_texture, new Vector2D(400, 400), new Vector2D(800, 800), 0.6);
+    }
+
     // Draw obstacles
     for (const obstacle of window.game.obstacles) {
         if (obstacle.length == 0)
@@ -1405,6 +1533,7 @@ function spawnNewBody() {
     let n = hsv2rgb(Math.round(Math.random() * 360), 0.5, 1);
     new_body.color = `rgb(${360*n[0]}, ${360*n[1]}, ${360*n[2]})`;
     window.game.bodies.push(new_body);
+    window.game.sidebar.selected_id = window.game.bodies.length - 1;
 
     window.game.new_circle.center = undefined;
     window.game.new_circle.radius = undefined;
@@ -1466,8 +1595,11 @@ window.onload = () => {
     document.addEventListener("keydown", (e) => {
         if (e.key == "Shift") {
             window.game.shift_down = true;
+        } else if (e.key == "Backspace") {
+            if (document.activeElement == document.body)
+                deleteCurrentBody();
         }
-    });
+     });
 
     document.addEventListener("keyup", (e) => {
         if (e.key == "Shift") {
