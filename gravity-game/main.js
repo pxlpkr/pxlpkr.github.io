@@ -1131,6 +1131,15 @@ function loadDynamicElements() {
     level_name_display.id = "level_name_display";
     body.appendChild(level_name_display);
 
+    let url_display = document.createElement("p");
+    body.appendChild(url_display);
+    url_display.innerText = "pxlpkr.github.io/gravity-game";
+    url_display.style = `position: absolute; color: #ffffff; font-size: ${size*0.06}px; margin: 0px; visibility: hidden`;
+    url_display.style.left = `${(width - size)/2 + (size - url_display.getBoundingClientRect().width)/2}px`;
+    url_display.style.top = `${(height - size)/2 + size + ((height - size)/2 - url_display.getBoundingClientRect().height)/2}px`;
+    //${(height-size)/2 + size + size*0.04}px
+    url_display.id = "url_display";
+
     let button_pageup = document.createElement("div");
     button_pageup.style = `position: absolute; width: ${size*0.04 - 2}px; height: ${size*0.04 - 2}px; left: ${size*0.08*2 + (width-size)/2 + size*0.1}px; top: ${(height-size)/2 - size*0.08 - 5}px; border-style: solid; border-width: 1px; border-color: #888888; background-size: ${size*0.04 - 2}px`;
     button_pageup.style.backgroundImage = "url('https://pxlpkr.github.io/gravity-game/button_pageup.png')";
@@ -1596,9 +1605,24 @@ window.onload = () => {
     document.addEventListener("keydown", (e) => {
         if (e.key == "Shift") {
             window.game.shift_down = true;
+            if (window.game.sidebar.selected_id >= 0) {
+                let body = window.game.bodies[window.game.sidebar.selected_id];
+                window.game.mouse.x = window.game.mouse.real.x;
+                window.game.mouse.y = window.game.mouse.real.y;
+                window.game.mouse.o_drag_x = body.pos.x;
+                window.game.mouse.o_drag_y = body.pos.y;
+                window.game.mouse.o_drag_ox = body.old_pos.x;
+                window.game.mouse.o_drag_oy = body.old_pos.y;
+            }
         } else if (e.key == "Backspace") {
             if (document.activeElement == document.body)
                 deleteCurrentBody();
+        } else if (e.key == "p") {
+            if ($("url_display").style.visibility == "") {
+                $("url_display").style.visibility = "hidden";
+            } else {
+                $("url_display").style.visibility = "";
+            }
         }
      });
 
