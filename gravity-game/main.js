@@ -281,6 +281,23 @@ function loadLevel(level_id) {
             ];
         break;
         case 7:
+            window.game.level_name = "Barrier to Entry";
+
+            window.game.ship.pos = new Vector2D(50, 400);
+            window.game.ship.old_pos = new Vector2D(49, 400);
+
+            window.game.goal.pos = new Vector2D(750, 400);
+
+            window.game.obstacles = [
+                [
+                    new Vector2D(125, 350),
+                    new Vector2D(125, 450),
+                    new Vector2D(700, 450),
+                    new Vector2D(700, 350)
+                ],
+            ];
+        break;
+        case 8:
             window.game.level_name = "Chicane";
 
             window.game.ship.pos = new Vector2D(400, 50);
@@ -300,23 +317,6 @@ function loadLevel(level_id) {
                     new Vector2D(400, 500),
                     new Vector2D(800, 500),
                     new Vector2D(800, 475)
-                ],
-            ];
-        break;
-        case 8:
-            window.game.level_name = "Barrier to Entry";
-
-            window.game.ship.pos = new Vector2D(50, 400);
-            window.game.ship.old_pos = new Vector2D(49, 400);
-
-            window.game.goal.pos = new Vector2D(750, 400);
-
-            window.game.obstacles = [
-                [
-                    new Vector2D(125, 350),
-                    new Vector2D(125, 450),
-                    new Vector2D(700, 450),
-                    new Vector2D(700, 350)
                 ],
             ];
         break;
@@ -1539,6 +1539,7 @@ function spawnNewBody() {
     window.game.new_circle.radius = undefined;
 
     updateGhost();
+    updateInfoBoxes();
 }
 
 window.onload = () => {
