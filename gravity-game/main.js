@@ -12,6 +12,10 @@ function cloneBody(obj) {
     return new_body;
 }
 
+function roundf(target, places) {
+    return Math.round(target * Math.pow(10, places)) / Math.pow(10, places);
+}
+
 class Vector2D {
     constructor(x, y) {
         if (x == undefined) {
@@ -65,6 +69,10 @@ class Vector2D {
 
     copy() {
         return new Vector2D(this.x, this.y);
+    }
+
+    round(places) {
+        return new Vector2D(roundf(this.x, places), roundf(this.y, places));
     }
 }
 
@@ -1535,9 +1543,9 @@ function hsv2rgb(h,s,v) {let f = (n,k=(n+h/60)%6) => v - v*s*Math.max( Math.min(
 
 function spawnNewBody() {
     let new_body = new CelestialBody();
-    new_body.pos = window.game.new_circle.center.copy();
-    new_body.old_pos = window.game.new_circle.center.copy();
-    new_body.radius = window.game.new_circle.radius;
+    new_body.pos = window.game.new_circle.center.round(1);
+    new_body.old_pos = window.game.new_circle.center.copy().round(1);
+    new_body.radius = roundf(window.game.new_circle.radius, 2);
     new_body.density = 1;
     let n = hsv2rgb(Math.round(Math.random() * 360), 0.5, 1);
     new_body.color = `rgb(${360*n[0]}, ${360*n[1]}, ${360*n[2]})`;
@@ -1653,10 +1661,10 @@ window.onload = () => {
                     x_diff = 0;
                     y_diff = 0;
                 }
-                body.pos.x = window.game.mouse.o_drag_x + x_diff;
-                body.pos.y = window.game.mouse.o_drag_y + y_diff;
-                body.old_pos.x = window.game.mouse.o_drag_ox + x_diff;
-                body.old_pos.y = window.game.mouse.o_drag_oy + y_diff;
+                body.pos.x = window.game.mouse.o_drag_x + roundf(x_diff, 4);
+                body.pos.y = window.game.mouse.o_drag_y + roundf(y_diff, 4);
+                body.old_pos.x = window.game.mouse.o_drag_ox + roundf(x_diff, 4);
+                body.old_pos.y = window.game.mouse.o_drag_oy + roundf(y_diff, 4);
 
                 // // Stop overlap
                 // for (const other of window.game.bodies) {
